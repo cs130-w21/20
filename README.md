@@ -5,6 +5,48 @@
 
 This repo serves as a template for repositories in this organization. The following information describes how the native features/workflows of Github can be customized to work in a scrum development process.
 
+## Setup
+It is recommended to install dependencies for this project in a virtual environment. Python 3 comes with `venv`, while Python 2 needs `virtualenv`. Instructions here are from [Flask's docs](https://flask.palletsprojects.com/en/1.1.x/installation/#python-version).
+
+### Create an environment
+On Unix machines, run the following in the project folder:
+
+```
+$ mkdir venv
+$ python3 -m venv venv
+```
+
+On Windows, run the following in the project folder (Powershell):
+```
+> mkdir venv
+> py -3 -m venv venv
+```
+
+If you are using Python 2, run this instead:
+```
+$ mkdir venv
+$ python2 -m virtualenv venv
+```
+
+### Activate the environment
+Before installing dependencies, activate the created environment:
+```
+$ . venv/bin/activate
+```
+
+On Windows:
+```
+> venv\Scripts\activate
+```
+
+### Install dependencies
+Within the activated environment, run the following command to install dependencies (Windows/Unix):
+```
+$ pip install -r requirements.txt
+```
+
+This will install Flask with optional dependencies in your activated environment. If you do not need optional dependencies listed in the requirements file, you can edit `requirements.txt` before installing.
+
 ## Issues
 
 An issue is a unit of tracking work. Issues can be classified into different classes using `labels`. This can be used to classify issues in the scrum process as follows.
