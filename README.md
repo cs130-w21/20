@@ -1,7 +1,7 @@
 # StockMeetsBagel
 
-[![Build Status](https://travis-ci.org/cs130-w21/template.svg?branch=master)](https://travis-ci.org/cs130-w21/template)
-[![Release](https://img.shields.io/github/v/release/cs130-w21/template?label=release)](https://github.com/cs130-w21/template/releases/latest)
+[![Build Status](https://travis-ci.org/cs130-w21/20.svg?branch=master)](https://travis-ci.org/cs130-w21/20)
+[![Release](https://img.shields.io/github/v/release/cs130-w21/20?label=release)](https://github.com/cs130-w21/20/releases/latest)
 
 (Description goes here)
 
