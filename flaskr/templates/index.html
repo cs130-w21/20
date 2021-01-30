@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Welcome to Stonks {% endblock %}</h1>
+    <form method="post" class="flex-center">
+	    <label for="stonk">Start by inputting your stonkery below.</label>
+	    <input name="stonk" id="stonk" required>
+	    <input type="submit" value="Submit">
+  	</form>
+  	<p> Have a session ID already? Go to Log In</p>
+{% endblock %}
