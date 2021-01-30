@@ -72,14 +72,21 @@ a {
 	padding: 20px;
 }
 
+h1 {
+	padding-top: 20px;
+}
+
 h1, h2 {
 	margin: 10px;
 }
 form {
 	margin: 1em 0;
 }
-label, input {
+label {
 	margin: 0.5em; 
+}
+input {
+	margin: 0 0 15px;
 }
 .container .button a {
 	padding: 10px 15px;
@@ -93,3 +100,46 @@ label, input {
 .container .info {
 	padding: 20px;
 }
+
+
+/* Home */
+.selected-stocks {
+	box-sizing: border-box;
+}
+
+.table-container {
+  display: block;
+  margin: 2em auto;
+  width: 90%;
+  max-width: 400px;
+}
+
+.flex-table {
+  display: flex;
+  flex-flow: row wrap;
+  border-left: solid 1px #d9d9d9;
+  color: white;
+}
+
+.flex-row {
+  text-align: center;
+  padding: 0.5em 0.5em;
+  border-right: solid 1px #d9d9d9;
+  border-bottom: solid 1px #d9d9d9;
+  background: #5c5f63;
+}
+
+.flex-row.stock {
+  width: 50%;
+}
+.flex-row.volume {
+  width: 40%;
+}
+.flex-row.close {
+  width: 10%;
+  background: #d9d9d9;
+}
+.flex-row.close:hover {
+  background: #0080ff;
+}
+

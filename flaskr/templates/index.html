@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Welcome to Stonks {% endblock %}</h1>
+    <h1>{% block title %} Welcome to StockMeetsBagel {% endblock %}</h1>
+    <h2>Start by inputting your stonk information below</h2>
     <form method="post" class="flex-center">
-	    <label for="stonk">Start by inputting your stonkery below.</label>
-	    <input name="stonk" id="stonk" required>
-	    <input type="submit" value="Submit">
+	    <label for="stock">Stock Symbol</label>
+	    <input name="stock" id="stock" required>
+	    <label for="volume">Number of Shares</label>
+	    <input name="volume" id="volume" required>
+	    <input type="submit" value="Add Stock">
   	</form>
+  	{% if stock_dict is none %}
   	<p> Have a session ID already? Go to Log In</p>
+  	{% else %}
+  	<div class="selected-stocks table-container" role="table">
+  		<div class="flex-table row" role="rowgroup">
+  		{% for key, value in stock_dict.items() %}
+    		<div class="flex-row stock" role="cell">{{ key }}</div>
+  			<div class="flex-row volume" role="cell">{{ value }}</div>
+  			<a href='#' class="flex-row close"><div>&#x2715</div></a>
+		{% endfor %}
+		</div>
+	</div>
+	<div class='info'>
+   		<div class="button"><a href="{{ url_for('results') }}">Get My Results</a></div>
+	</div>
+  	{% endif %}
 {% endblock %}
