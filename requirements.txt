@@ -1,0 +1,7 @@
+##### Flask+Optional Stuff #####
+Flask
+blinker
+simplejson
+python-dotenv
+watchdog
+
