@@ -26,9 +26,16 @@ def dated_url_for(endpoint, **values):
 @app.route('/', methods=['GET', 'POST'])
 def index():
 	if request.method == 'POST':
-		return redirect(url_for('results'))
+		# TODO: input validation
+		stock_symbol = request.form['stock']
+		volume = request.form['volume']
+		
+		# TODO: Send form results to DB, fetch all added stocks and display them
+		dummy_stock_dict = {stock_symbol: volume} 
+		return render_template('index.html', stock_dict=dummy_stock_dict)
+		# return redirect(url_for('results'))
 	else:
-		return render_template('index.html')
+		return render_template('index.html', stock_dict=None)
 
 # Results page (generates session id or code)
 @app.route('/results')
