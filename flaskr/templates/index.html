@@ -11,7 +11,10 @@
 	    <input type="submit" value="Add Stock">
   	</form>
   	{% if stock_dict is none %}
-  	<p> Have a session ID already? Go to Log In</p>
+	<p> Have a session ID already? Go to Log In</p>
+	{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+	{% endfor %}
   	{% else %}
   	<div class="selected-stocks table-container" role="table">
   		<div class="flex-table row" role="rowgroup">

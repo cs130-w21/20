@@ -1,9 +1,22 @@
 import os
 
-from flask import Flask, render_template, url_for, session, redirect, request
+from flask import (
+	Flask, render_template, url_for, session, redirect, request,
+	flash,
+)
+from finnhub import Client as make_client
+"""
+Elvis' Finnhub API keys
+Sandbox API Key: sandbox_c0bfrg748v6to0roveg0
+Regular API Key: c0bfrg748v6to0roveg0
+
+There are limits! See documentation:
+https://finnhub.io/docs/api/upgrade-downgrade
+"""
 
 def create_app():
 	app = Flask(__name__, instance_relative_config=True)
+	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 
 	# Secret key for session
 	app.config['SECRET_KEY'] = os.urandom(24)
@@ -28,12 +41,19 @@ def create_app():
 	def index():
 		if request.method == 'POST':
 			# TODO: input validation
-			stock_symbol = request.form['stock']
+			stock_symbol = request.form['stock'].upper()
 			volume = request.form['volume']
-
+			symbol_quote = finnhub_client.quote(stock_symbol)
+			error = None
+			if symbol_quote['c'] == 0:
+				error = "Invalid stock symbol: {}".format(stock_symbol)
+			
 			# TODO: Send form results to DB, fetch all added stocks and display them
-			dummy_stock_dict = {stock_symbol: volume} 
-			return render_template('index.html', stock_dict=dummy_stock_dict)
+			if error is None:
+				dummy_stock_dict = {stock_symbol: volume} 
+				return render_template('index.html', stock_dict=dummy_stock_dict)
+			flash(error)
+			return render_template('index.html', stock_dict=None)
 		else:
 			return render_template('index.html', stock_dict=None)
 
