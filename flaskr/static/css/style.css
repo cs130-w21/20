@@ -23,7 +23,7 @@ a {
 }
 
 .flash { 
-  margin: 1em 0; 
+  margin: 0.5em 0; 
   padding: 1em; 
   background: #cae6f6; 
   border: 1px solid #377ba8; 
@@ -87,7 +87,7 @@ h1, h2 {
 	margin: 10px;
 }
 form {
-	margin: 1em 0;
+	margin: 0.5em 0;
 }
 label {
 	margin: 0.5em; 
