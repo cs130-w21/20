@@ -2,7 +2,10 @@
 
 {% block content %}
     <h1>{% block title %} Welcome to StockMeetsBagel {% endblock %}</h1>
-    <h2>Start by inputting your stonk information below</h2>
+	<h2>Start by inputting your stonk information below</h2>
+	{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+	{% endfor %}
     <form method="post" class="flex-center">
 	    <label for="stock">Stock Symbol</label>
 	    <input name="stock" id="stock" required>
@@ -11,14 +14,15 @@
 	    <input type="submit" value="Add Stock">
   	</form>
   	{% if stock_dict is none %}
-  	<p> Have a session ID already? Go to Log In</p>
-  	{% else %}
+	<p> Have a session ID already? Go to Log In</p>
+	{% else %}
   	<div class="selected-stocks table-container" role="table">
   		<div class="flex-table row" role="rowgroup">
   		{% for key, value in stock_dict.items() %}
     		<div class="flex-row stock" role="cell">{{ key }}</div>
   			<div class="flex-row volume" role="cell">{{ value }}</div>
-  			<a href='#' class="flex-row close"><div>&#x2715</div></a>
+			  <a href="{{ url_for('remove', key=key) }}" 
+			  class="flex-row close"><div method="post">&#x2715</div></a>
 		{% endfor %}
 		</div>
 	</div>

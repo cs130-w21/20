@@ -6,3 +6,5 @@ python-dotenv
 watchdog
 ##### Test Tools #####
 pytest
+##### API #####
+finnhub-python
