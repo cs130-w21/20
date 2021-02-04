@@ -1,4 +1,4 @@
-import os
+import os, string, random
 
 from flask import (
 	Flask, render_template, url_for, session, redirect, request,
@@ -18,8 +18,20 @@ def create_app():
 	app = Flask(__name__, instance_relative_config=True)
 	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 
-	# Secret key for session
-	app.config['SECRET_KEY'] = os.urandom(24)
+	app.config.from_mapping(
+        SECRET_KEY=os.urandom(24),
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
+
+    # Ensure the instance folder exists
+	try:
+		os.makedirs(app.instance_path)
+	except OSError:
+		pass
+
+	# Initialize db
+	from . import db
+	db.init_app(app)
 
 	# Fix browser caching for css
 	@app.context_processor
@@ -61,7 +73,7 @@ def create_app():
 				else:
 					session['stock_dict'] = {stock_symbol: volume}
 				return render_template('index.html', stock_dict=session['stock_dict'])
-			
+
 			flash(error)
 			if 'stock_dict' in session and session['stock_dict']:
 				return render_template('index.html', stock_dict=session['stock_dict'])
@@ -78,13 +90,17 @@ def create_app():
 		if 'code' in session:
 			return render_template('results.html', code=session['code'], warning=True)
 		else:
-			code = 'QWERTY'  # TODO: generate random code
+
+			# Generates a 10 character random string
+			code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 			session['code'] = code
-			# TODO: Update DB here
+
+			db.create_session(code, session['stock_dict'])
+
 			# Person sends link to partner
 			print(session)
 			return render_template('results.html', code=code)
-	
+
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
 	def remove(key):
