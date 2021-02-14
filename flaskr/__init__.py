@@ -5,7 +5,7 @@ from flask import (
 	flash,
 )
 from finnhub import Client as make_client
-from algorithm import generate_profile, compare_profiles
+from . import algorithm
 """
 Elvis' Finnhub API keys
 Sandbox API Key: sandbox_c0bfrg748v6to0roveg0
