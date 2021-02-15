@@ -1,5 +1,6 @@
-# TODO: cache calls to Finnhub
+import math
 
+# TODO: cache calls to Finnhub
 def generate_profile(portfolio, finnhub_client):
     """
     Generates personality profile from portfolio
@@ -66,10 +67,11 @@ def generate_profile(portfolio, finnhub_client):
         I = I + (inter['NUM']/total)*inter['IMPDIS']
         S = S + (inter['NUM']/total)*inter['SENTIM']
         A = A + (inter['NUM']/total)*inter['ATTDEP']
-    person['EXPEXT'] = E
-    person['IMPDIS'] = I
-    person['SENTIM'] = S
-    person['ATTDEP'] = A
+    # 472, 442, 14, 110
+    person['EXPEXT'] = (2/(1+math.exp(-E/118))) - 1
+    person['IMPDIS'] = (2/(1+math.exp(-I/111))) - 1
+    person['SENTIM'] = (2/(1+math.exp(-S/4))) - 1
+    person['ATTDEP'] = (2/(1+math.exp(-A/28))) - 1
     return person
 
 def compare_profiles(p1, p2, finnhub_client):
