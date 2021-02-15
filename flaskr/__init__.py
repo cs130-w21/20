@@ -9,7 +9,7 @@ from . import algorithm
 """
 Elvis' Finnhub API keys
 Sandbox API Key: sandbox_c0bfrg748v6to0roveg0
-Regular API Key: c0bfrg748v6to0roveg0
+Regular API Key: c0bfrg748v6to0rovefg
 
 There are limits! See documentation:
 https://finnhub.io/docs/api
@@ -17,7 +17,8 @@ https://finnhub.io/docs/api
 
 def create_app():
 	app = Flask(__name__, instance_relative_config=True)
-	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
+	finnhub_verify = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
+	finnhub_client = make_client(api_key="c0bfrg748v6to0rovefg")
 
 	app.config.from_mapping(
         SECRET_KEY=os.urandom(24),
@@ -55,7 +56,7 @@ def create_app():
 			# DONE: input validation
 			stock_symbol = request.form['stock'].upper()
 			volume = request.form['volume']
-			symbol_quote = finnhub_client.quote(stock_symbol)
+			symbol_quote = finnhub_verify.quote(stock_symbol)
 			error = None
 			if not volume.isdigit():
 				error = "Number of Shares must be a positive integer"
@@ -87,7 +88,12 @@ def create_app():
 	# Results page (generates session id or code)
 	@app.route('/results')
 	def results():
-		print(session)
+		# print(session)
+		if 'stock_dict' in session:
+			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
+			print(person)
+		else:
+			return redirect(url_for('index'))
 		if 'code' in session:
 			return render_template('results.html', code=session['code'], warning=True)
 		else:
