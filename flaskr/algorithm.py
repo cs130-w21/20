@@ -49,9 +49,9 @@ def generate_profile(portfolio, finnhub_client):
         if Size > 14e3: # cap the market cap
             Size = 14e3
         
-        E = 30.78*(MB - 1.7364) + 0.00024*(Size + 4124.38)
-        I = 29.63*(MB - 1.80656) + 0.0002*(12679.64 - Size)
-        S = 10.814*(2.37625 - MB) + 0.0118*(Size - 4895.96)
+        E = 19.23*(MB - 1.7364) + 0.0006*(Size + 4124.38)
+        I = 18.518*(MB - 1.80656) + 0.0005*(12679.64 - Size)
+        S = 6.757*(2.37625 - MB) + 0.0295*(Size - 4895.96)
         A = 0.001*(14271.26 - Size)
 
         intermediates.append({'EXPEXT': E,
