@@ -5,10 +5,11 @@ from flask import (
 	flash,
 )
 from finnhub import Client as make_client
+from . import algorithm
 """
 Elvis' Finnhub API keys
 Sandbox API Key: sandbox_c0bfrg748v6to0roveg0
-Regular API Key: c0bfrg748v6to0roveg0
+Regular API Key: c0bfrg748v6to0rovefg
 
 There are limits! See documentation:
 https://finnhub.io/docs/api
@@ -86,7 +87,12 @@ def create_app():
 	# Results page (generates session id or code)
 	@app.route('/results')
 	def results():
-		print(session)
+		# print(session)
+		if 'stock_dict' in session:
+			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
+			print(person)
+		else:
+			return redirect(url_for('index'))
 		if 'code' in session:
 			return render_template('results.html', code=session['code'], warning=True)
 		else:
