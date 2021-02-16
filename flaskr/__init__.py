@@ -17,7 +17,6 @@ https://finnhub.io/docs/api
 
 def create_app():
 	app = Flask(__name__, instance_relative_config=True)
-	finnhub_verify = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 	finnhub_client = make_client(api_key="c0bfrg748v6to0rovefg")
 
 	app.config.from_mapping(
@@ -56,7 +55,7 @@ def create_app():
 			# DONE: input validation
 			stock_symbol = request.form['stock'].upper()
 			volume = request.form['volume']
-			symbol_quote = finnhub_verify.quote(stock_symbol)
+			symbol_quote = finnhub_client.quote(stock_symbol)
 			error = None
 			if not volume.isdigit():
 				error = "Number of Shares must be a positive integer"
