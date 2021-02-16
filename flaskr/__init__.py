@@ -17,7 +17,7 @@ https://finnhub.io/docs/api
 
 def create_app():
 	app = Flask(__name__, instance_relative_config=True)
-	finnhub_client = make_client(api_key="c0bfrg748v6to0rovefg")
+	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 
 	app.config.from_mapping(
         SECRET_KEY=os.urandom(24),
