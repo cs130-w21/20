@@ -93,7 +93,7 @@ def create_app():
 	# Results page (generates session id or code)
 	@app.route('/results')
 	def results():
-		# print(session)
+		person = {}
 		if 'stock_dict' in session:
 			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
 			print(person)
@@ -107,7 +107,7 @@ def create_app():
 			code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 			session['code'] = code
 
-			db.create_profile(code, session['stock_dict'])
+			db.create_profile(code, person)
 
 			# Person sends link to partner
 			print(session)
