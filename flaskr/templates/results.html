@@ -1,18 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<h1>{% block title %}Stonk Results{% endblock %}</h1>
-    <h2>Your session key is {{ code }}</h2>
+	<h1>{% block title %}Your profile has been generated.{% endblock %}</h1>
+	<button type="button" class="collapsible pad-s">(E) Exploratory Excitability and Extravagance: 50%<span>+</span></button>
+	<div class="content">
+	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(I) Impulsiveness and Disorderliness: 13%<span>+</span></button>
+	<div class="content">
+	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(A) Attachment and Dependence: 69%<span>+</span></button>
+	<div class="content">
+	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(S) Sentimentality and Empathy: 0%<span>+</span></button>
+	<div class="content">
+	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	  </p>
+	</div>
+    <h2 class="pad-m">Your unique ID is {{ code }}</h2>
     <div class="info flex-center">
-        <p>Now send the code to your partner</p>
-    	<p>Click on the button below when your partner is ready</p>
+        <p>Copy paste this code to send to your partner</p>
+    	<p>Click on the button below when your partner is ready!</p>
     </div>
     <div class='info'>
-   		<div class="button"><a href="{{ url_for('wait_for_partner', code='{{ code }}') }}">See Our Results</a></div>
+   		<div class="button"><a href="{{ url_for('results', code='{{ code }}') }}">Compare Our Results</a></div>
 	</div>
-	{% if warning == true %}
-	    <div class="info flex-center">
-	        <p>Your partner has not finished their stonks yet</p>
-	    </div>
-	{% endif %}
 {% endblock %}
