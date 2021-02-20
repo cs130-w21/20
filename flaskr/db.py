@@ -5,42 +5,22 @@ from flask.cli import with_appcontext
 
 # API for reading/writing to sqlite db
 
-def get_session(session_id):
-    session = get_db().execute(
-            'SELECT * FROM sessions WHERE sid = ?', (session_id,)
+def get_profile(user_id):
+    profile = get_db().execute(
+            'SELECT * FROM profiles WHERE uid = ?', (user_id,)
         ).fetchone()
 
-    return session
+    return profile
 
-def create_session(session_id, portfolio1={}):
-
-    # Session already exists
-    if get_session(session_id):
-        return False
-    else:
-        db = get_db()
-        db.execute(
-            'INSERT INTO sessions (sid, portfolio1, portfolio2)'
-            ' VALUES (?, ?, ?)',
-            (session_id, json.dumps(portfolio1), "{}")
-        )
-        db.commit()
-        return True
-
-def update_session(session_id, portfolio1, portfolio2):
-
-    # Session does not exist
-    if not get_session(session_id):
-        return False
-    else:
-        db = get_db()
-        db.execute(
-            'UPDATE sessions SET portfolio1 = ?, portfolio2 = ?'
-            ' WHERE sid = ?',
-            (json.dumps(portfolio1), json.dumps(portfolio2), session_id)
-        )
-        db.commit()
-        return True
+def create_profile(user_id, profile={}):
+    db = get_db()
+    db.execute(
+        'INSERT INTO profiles (uid, profile)'
+        ' VALUES (?, ?)',
+        (user_id, json.dumps(profile))
+    )
+    db.commit()
+    return True
 
 # Tutorial code from https://flask.palletsprojects.com/en/1.1.x/tutorial/database/
 

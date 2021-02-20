@@ -1,7 +1,6 @@
-DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS profiles;
 
-CREATE TABLE sessions (
-  sid TEXT PRIMARY KEY,
-  portfolio1 TEXT NOT NULL,
-  portfolio2 TEXT NOT NULL
+CREATE TABLE profiles (
+  uid TEXT PRIMARY KEY,
+  profile TEXT NOT NULL
 );
