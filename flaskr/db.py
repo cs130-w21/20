@@ -7,18 +7,18 @@ from flask.cli import with_appcontext
 
 def get_profile(user_id):
     session = get_db().execute(
-            'SELECT * FROM sessions WHERE sid = ?', (user_id,)
+            'SELECT * FROM profiles WHERE uid = ?', (user_id,)
         ).fetchone()
 
     return session
 
-def create_profile(user_id, portfolio1={}):
+def create_profile(user_id, profile={}):
 
     db = get_db()
     db.execute(
-        'INSERT INTO sessions (sid, portfolio1, )'
+        'INSERT INTO profiles (uid, profile, )'
         ' VALUES (?, ?)',
-        (user_id, json.dumps(portfolio1),)
+        (user_id, json.dumps(profile),)
     )
     db.commit()
     return True
