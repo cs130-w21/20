@@ -16,7 +16,7 @@ def create_profile(user_id, portfolio1={}):
 
     db = get_db()
     db.execute(
-        'INSERT INTO sessions (sid, portfolio1, portfolio2)'
+        'INSERT INTO sessions (sid, portfolio1, )'
         ' VALUES (?, ?)',
         (user_id, json.dumps(portfolio1),)
     )
