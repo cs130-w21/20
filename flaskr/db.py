@@ -6,19 +6,18 @@ from flask.cli import with_appcontext
 # API for reading/writing to sqlite db
 
 def get_profile(user_id):
-    session = get_db().execute(
-            'SELECT * FROM profiles WHERE sid = ?', (user_id,)
+    profile = get_db().execute(
+            'SELECT * FROM profiles WHERE uid = ?', (user_id,)
         ).fetchone()
 
-    return session
+    return profile
 
 def create_profile(user_id, profile={}):
-
     db = get_db()
     db.execute(
-        'INSERT INTO profiles (sid, portfolio, )'
+        'INSERT INTO profiles (uid, profile)'
         ' VALUES (?, ?)',
-        (user_id, json.dumps(profile),)
+        (user_id, json.dumps(profile))
     )
     db.commit()
     return True

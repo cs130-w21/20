@@ -84,6 +84,12 @@ def create_app():
 				return render_template('index.html', stock_dict=session['stock_dict'])
 			return render_template('index.html', stock_dict=None)
 
+	# Compare page
+	@app.route('/compare', methods=['GET', 'POST'])
+	def compare():
+		return render_template('compare.html')
+
+
 	# Results page (generates session id or code)
 	@app.route('/results')
 	def results():
@@ -101,7 +107,7 @@ def create_app():
 			code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 			session['code'] = code
 
-			db.create_session(code, session['stock_dict'])
+			db.create_profile(code, session['stock_dict'])
 
 			# Person sends link to partner
 			print(session)
