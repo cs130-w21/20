@@ -9,11 +9,9 @@
     <nav>
 	  <ul class="menu">
 	    <li class="logo"><a href="{{ url_for('index')}}">Stonks</a></li>
-	    <li class="item"><a href="{{ url_for('index')}}">Home</a></li>
 	    <li class="item"><a href="#">About</a></li>
 	    </li>
-	    <li class="item button"><a href="#">Log In</a></li>
-	    <li class="item button secondary"><a href="#">Sign Up</a></li>
+	    <li class="item button"><a href="{{ url_for('compare')}}">Compare</a></li>
 	    <li class="toggle"><a href="#"><i class="fas fa-bars"></i></a></li>
 	  </ul>
 	</nav>

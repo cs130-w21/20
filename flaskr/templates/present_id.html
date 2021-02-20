@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>{% block title %}Stonk Results{% endblock %}</h1>
+    <h2>Your ID is {{ code }}</h2>
+    <div class="info flex-center">
+        <p>Please <b>copy this code </b>and send it to a partner.</p>
+    	<p>Click on the button below when your has sent you their code.</p>
+    </div>
+    <div class='info'>
+   		<div class="button"><a href="{{ url_for('compare') }}">Compare Compatibility!</a></div>
+	</div>
+{% endblock %}

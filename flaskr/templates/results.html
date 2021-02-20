@@ -1,18 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<h1>{% block title %}Stonk Results{% endblock %}</h1>
-    <h2>Your ID is {{ code }}</h2>
+	<h1>{% block title %}Your Compatibility{% endblock %}</h1>
+    <h2>Our calculator generated the following results:</h2>
     <div class="info flex-center">
-        <p>Now send the code to your partner</p>
-    	<p>Click on the button below when your partner is ready</p>
+        <p>bilibalabilibala</p>
     </div>
-    <div class='info'>
-   		<div class="button"><a href="{{ url_for('wait_for_partner', code='{{ code }}') }}">See Our Results</a></div>
-	</div>
-	{% if warning == true %}
-	    <div class="info flex-center">
-	        <p>Your partner has not finished their stonks yet</p>
-	    </div>
-	{% endif %}
 {% endblock %}
