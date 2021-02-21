@@ -100,7 +100,7 @@ def create_app():
 		else:
 			return redirect(url_for('index'))
 		if 'code' in session:
-			return render_template('results.html', code=session['code'], warning=True)
+			return render_template('results.html', code=session['code'])
 		else:
 
 			# Generates a 10 character random string
@@ -121,19 +121,10 @@ def create_app():
 			session.modified = True
 		return redirect(url_for('index'))
 
-	@app.route('/waiting/<code>')
-	def wait_for_partner(code):
-		# TODO: check if partner is done
-		# if done, return redirect(url_for('partner_validated', code=code))
-		# if not, return the results page again
-		if 'code' in session:
-			return redirect(url_for('results'))
-		else:
-			return 'yikes something went wrong'
-
+	# Comparison page
 	@app.route('/compare/<code>')
 	def partner_validated(code):
-		print(session)
+		# TODO: Implement compare.html
 		return 'partner finished'
 
 	return app
