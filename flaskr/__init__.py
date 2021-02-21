@@ -87,35 +87,12 @@ def create_app():
 	# Compare page
 	@app.route('/compare', methods=['GET', 'POST'])
 	def compare():
-		if request.method == 'POST':
-			uid1 = request.form['person1']
-			uid2 = request.form['person2']
-			error = None
-
-			if uid1 == uid2:
-				error = "IDs cannot be the same!"
-
-			elif db.get_profile(uid1)==None or db.get_profile(uid2)==None:
-				error = "Invalid ID"
-
-			#TODO: result generation and presentation
-			if error is None:
-				return render_template('results.html')
-			else:
-				flash(error)
-				return render_template('compare.html')
-
-		else:
-			return render_template('compare.html')
+		return render_template('compare.html')
 
 
+	# Results page (generates session id or code)
 	@app.route('/results')
 	def results():
-		return render_template(results.html)
-
-	# Present_id page (generates session id or code)
-	@app.route('/present_id')
-	def present_id():
 		person = {}
 		if 'stock_dict' in session:
 			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
@@ -123,7 +100,7 @@ def create_app():
 		else:
 			return redirect(url_for('index'))
 		if 'code' in session:
-			return render_template('present_id.html', code=session['code'], warning=True)
+			return render_template('results.html', code=session['code'], warning=True)
 		else:
 
 			# Generates a 10 character random string
@@ -134,7 +111,7 @@ def create_app():
 
 			# Person sends link to partner
 			print(session)
-			return render_template('present_id.html', code=code)
+			return render_template('results.html', code=code)
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
@@ -148,9 +125,9 @@ def create_app():
 	def wait_for_partner(code):
 		# TODO: check if partner is done
 		# if done, return redirect(url_for('partner_validated', code=code))
-		# if not, return the present_id page again
+		# if not, return the results page again
 		if 'code' in session:
-			return redirect(url_for('present_id'))
+			return redirect(url_for('results'))
 		else:
 			return 'yikes something went wrong'
 
