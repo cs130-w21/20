@@ -8,15 +8,31 @@
 <body>
     <nav>
 	  <ul class="menu">
-	    <li class="logo"><a href="{{ url_for('index')}}">Stonks</a></li>
-	    <li class="item"><a href="#">About</a></li>
+	    <li class="logo"><a href="{{ url_for('index')}}">StockMeetsBagel</a></li>
+	    <li class="item"><a href="{{ url_for('index')}}">Home</a></li>
+	    <li class="item"><a href="#">Compare</a></li>
 	    </li>
-	    <li class="item button"><a href="{{ url_for('compare')}}">Compare</a></li>
 	    <li class="toggle"><a href="#"><i class="fas fa-bars"></i></a></li>
 	  </ul>
 	</nav>
 	<div class="container flex-center">
 		{% block content %} {% endblock %}
 	</div>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+</script>
 </body>
 </html>
