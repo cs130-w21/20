@@ -144,20 +144,7 @@ def create_app():
 			session.modified = True
 		return redirect(url_for('index'))
 
-<<<<<<< HEAD
-	@app.route('/waiting/<code>')
-	def wait_for_partner(code):
-		# TODO: check if partner is done
-		# if done, return redirect(url_for('partner_validated', code=code))
-		# if not, return the present_id page again
-		if 'code' in session:
-			return redirect(url_for('present_id'))
-		else:
-			return 'yikes something went wrong'
-
-=======
 	# Comparison page
->>>>>>> 99f7698eb8340d0280162a09ab922cb18acd9e66
 	@app.route('/compare/<code>')
 	def partner_validated(code):
 		# TODO: Implement compare.html
