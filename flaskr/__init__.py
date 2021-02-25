@@ -110,23 +110,25 @@ def create_app():
 			return render_template('compare.html')
 
 
-	@app.route('/results')
-	def results():
-		return render_template(results.html)
-
-	# Present_id page (generates session id or code)
 	@app.route('/present_id')
 	def present_id():
+		return render_template('present_id.html')
+
+	# Present_id page (generates session id or code)
+	@app.route('/results')
+	def results():
 		person = {}
 		if 'stock_dict' in session:
-			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
-			print(person)
+			if session['updated']:
+				person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
+				session['person'] = person
+			# print(person)
 		else:
 			return redirect(url_for('index'))
 		# If code has already been generated and the input portfolio is unchanged, 
 		# skip code generation and persisting to db
 		if 'code' in session and not session['updated']:
-			return render_template('present_id.html', code=session['code'], warning=True)
+			return render_template('results.html', code=session['code'], warning=True, person=session['person'])
 		else:
 
 			# Generates a 10 character random string
@@ -138,7 +140,7 @@ def create_app():
 			# Person sends link to partner
 			print(session)
 			session['updated'] = False
-			return render_template('present_id.html', code=code)
+			return render_template('results.html', code=code, person=person)
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
