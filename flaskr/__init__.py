@@ -68,6 +68,7 @@ def create_app():
 			# Code below uses Flask session to store data which can be moved to
 			# DB later.
 			if error is None:
+				session['updated'] = True
 				if 'stock_dict' in session:
 					(session['stock_dict'])[stock_symbol] = volume
 					session.modified = True
@@ -122,7 +123,9 @@ def create_app():
 			print(person)
 		else:
 			return redirect(url_for('index'))
-		if 'code' in session:
+		# If code has already been generated and the input portfolio is unchanged, 
+		# skip code generation and persisting to db
+		if 'code' in session and not session['updated']:
 			return render_template('present_id.html', code=session['code'], warning=True)
 		else:
 
@@ -134,6 +137,7 @@ def create_app():
 
 			# Person sends link to partner
 			print(session)
+			session['updated'] = False
 			return render_template('present_id.html', code=code)
 
 	# Remove stock symbol from table
@@ -141,6 +145,7 @@ def create_app():
 	def remove(key):
 		if 'stock_dict' in session:
 			session['stock_dict'].pop(key, None)
+			session['updated'] = True
 			session.modified = True
 		return redirect(url_for('index'))
 
