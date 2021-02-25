@@ -118,13 +118,13 @@ def create_app():
 	@app.route('/results')
 	def results():
 		person = {}
-		if 'stock_dict' in session:
-			if session['updated']:
-				person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
-				session['person'] = person
-			# print(person)
-		else:
+		if not 'stock_dict' in session:
 			return redirect(url_for('index'))
+		if session['updated']:
+			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
+			session['person'] = person
+		# print(person)
+		
 		# If code has already been generated and the input portfolio is unchanged, 
 		# skip code generation and persisting to db
 		if 'code' in session and not session['updated']:
