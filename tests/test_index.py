@@ -31,6 +31,14 @@ def test_index(client):
     # Add bogus volume
     post_response = client.post('/', data=dict(
             stock=TEST_STOCK2,
+            volume='a'
+    ), follow_redirects=True)
+    assert b"Number of Shares must be a positive integer" in post_response.data
+    assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
+
+    # Add non-positive volume
+    post_response = client.post('/', data=dict(
+            stock=TEST_STOCK2,
             volume='0'
     ), follow_redirects=True)
     assert b"Number of Shares must be a positive integer" in post_response.data
@@ -55,4 +63,12 @@ def test_index(client):
     get_response = client.get('remove/{}'.format(TEST_STOCK2)
     , follow_redirects=True)
     assert bytes(TEST_STOCK2, encoding=ENCODING) not in get_response.data
+    assert b"Get My Results" not in get_response.data
+
+    # Add bogus volume
+    post_response = client.post('/', data=dict(
+            stock=TEST_STOCK2,
+            volume='a'
+    ), follow_redirects=True)
+    assert b"Number of Shares must be a positive integer" in post_response.data
     assert b"Get My Results" not in get_response.data

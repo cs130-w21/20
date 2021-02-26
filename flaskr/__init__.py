@@ -112,11 +112,6 @@ def create_app(test_config=None):
 		else:
 			return render_template('compare.html')
 
-
-	@app.route('/present_id')
-	def present_id():
-		return render_template('present_id.html')
-
 	# Present_id page (generates session id or code)
 	@app.route('/results')
 	def results():
@@ -126,7 +121,6 @@ def create_app(test_config=None):
 		if session['updated']:
 			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
 			session['person'] = person
-		# print(person)
 		
 		# If code has already been generated and the input portfolio is unchanged, 
 		# skip code generation and persisting to db
@@ -153,11 +147,5 @@ def create_app(test_config=None):
 			session['updated'] = True
 			session.modified = True
 		return redirect(url_for('index'))
-
-	# Comparison page
-	@app.route('/compare/<code>')
-	def partner_validated(code):
-		# TODO: Implement compare.html
-		return 'partner finished'
 
 	return app
