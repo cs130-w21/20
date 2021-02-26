@@ -13,6 +13,7 @@ def app():
 	app = create_app({
 		'TESTING': True,
 		'DATABASE': db_path,
+		'SECRET_KEY': b'\x12\xf1\xca.\x15\x86\xbe\xaax\x18n<`\xe3O\x95',
 	})
 	with app.app_context():
 		init_db()
