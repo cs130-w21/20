@@ -19,14 +19,12 @@ def create_app(test_config=None):
 	app = Flask(__name__, instance_relative_config=True)
 	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 
-	app.config.from_mapping(
-        SECRET_KEY=os.urandom(24),
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
-
 	# Load config (if it exists) or take a test config
 	if test_config is None:
-		app.config.from_pyfile('config.py', silent=True)
+		app.config.from_mapping(
+			SECRET_KEY=os.urandom(24),
+			DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+		)
 	else:
 		app.config.from_mapping(test_config)
     # Ensure the instance folder exists
