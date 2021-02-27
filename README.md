@@ -46,3 +46,9 @@ $ pip install -r requirements.txt
 ```
 
 This will install Flask with optional dependencies in your activated environment. If you do not need optional dependencies listed in the requirements file, you can edit `requirements.txt` before installing.
+
+### Before Running
+If you are running the application for the first time, you will need to initialize the database. Run the following to initialize the database:
+```
+$ flask init-db
+```
