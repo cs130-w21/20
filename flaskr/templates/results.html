@@ -2,22 +2,22 @@
 
 {% block content %}
 	<h1>{% block title %}Your profile has been generated.{% endblock %}</h1>
-	<button type="button" class="collapsible pad-s">(E) Exploratory Excitability and Extravagance: {{ person['EXPEXT'] }}%<span>+</span></button>
+	<button type="button" class="collapsible pad-s">(E) Exploratory Excitability and Extravagance: {{ person.get('EXPEXT', None) }}%<span>+</span></button>
 	<div class="content">
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 	  </p>
 	</div>
-	<button type="button" class="collapsible">(I) Impulsiveness and Disorderliness: {{ person['IMPDIS'] }}%<span>+</span></button>
+	<button type="button" class="collapsible">(I) Impulsiveness and Disorderliness: {{ person.get('IMPDIS', None) }}%<span>+</span></button>
 	<div class="content">
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 	  </p>
 	</div>
-	<button type="button" class="collapsible">(A) Attachment and Dependence: {{ person['ATTDEP'] }}%<span>+</span></button>
+	<button type="button" class="collapsible">(A) Attachment and Dependence: {{ person.get('ATTDEP', None) }}%<span>+</span></button>
 	<div class="content">
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 	  </p>
 	</div>
-	<button type="button" class="collapsible">(S) Sentimentality and Empathy: {{ person['SENTIM'] }}%<span>+</span></button>
+	<button type="button" class="collapsible">(S) Sentimentality and Empathy: {{ person.get('SENTIM', None) }}%<span>+</span></button>
 	<div class="content">
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 	  </p>

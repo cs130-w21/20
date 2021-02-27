@@ -103,8 +103,10 @@ def create_app(test_config=None):
 				error = "Invalid ID"
 
 			#TODO: result generation and presentation
+			# This routes to a placeholder route
+			# Will probably have to rename this route
 			if error is None:
-				return render_template('results.html')
+				return redirect(url_for('compat'))
 			else:
 				flash(error)
 				return render_template('compare.html')
@@ -138,6 +140,10 @@ def create_app(test_config=None):
 			print(session)
 			session['updated'] = False
 			return render_template('results.html', code=code, person=person)
+
+	@app.route('/compat')
+	def compat():
+		return redirect(url_for('index'))
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
