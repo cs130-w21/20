@@ -74,7 +74,7 @@ def generate_profile(portfolio, finnhub_client):
     person['ATTDEP'] = floor(100/(1+exp(-A/28)))
     return person
 
-def compare_profiles(person1, person2):
+def compare_profiles(person1, person2, finnhub_client):
     """
     Generates personality profile from portfolio
 
@@ -84,6 +84,8 @@ def compare_profiles(person1, person2):
         Dictionary of personality profile for Person 1.
     person2 : (str, int) dict
         Dictionary of personality profile for Person 2.
+    finnhub_client : finnhub.Client
+        Finnhub API client for financial data
 
     Returns
     -------
@@ -99,16 +101,19 @@ def compare_profiles(person1, person2):
         'SENTIM': 0.0,
     }
     
-    # closeness(a1, a2) = aMax - (aMax * (|a1 - a2| / aMax)
+    # closeness(a1, a2) = aMax - |a1 - a2|
     #       aMax = max(range of a)
     #       range of a = range of a1 = range of a2 = 0->100
-    closeness['EXPEXT'] = 100 - floor(100 * (abs(person1['EXPEXT'] - person2['EXPEXT']) / 100))
-    closeness['IMPDIS'] = 100 - floor(100 * (abs(person1['IMPDIS'] - person2['IMPDIS']) / 100))
-    closeness['ATTDEP'] = 100 - floor(100 * (abs(person1['ATTDEP'] - person2['ATTDEP']) / 100))
-    closeness['SENTIM'] = 100 - floor(100 * (abs(person1['SENTIM'] - person2['SENTIM']) / 100))
+    closeness['EXPEXT'] = 100 - floor(abs(person1['EXPEXT'] - person2['EXPEXT']))
+    closeness['IMPDIS'] = 100 - floor(abs(person1['IMPDIS'] - person2['IMPDIS']))
+    closeness['ATTDEP'] = 100 - floor(abs(person1['ATTDEP'] - person2['ATTDEP']))
+    closeness['SENTIM'] = 100 - floor(abs(person1['SENTIM'] - person2['SENTIM']))
 
     # Simple average
-    compatibility = (closeness['EXPEXT'] + closeness['EXPEXT'] + 
-                    closeness['EXPEXT'] + closeness['EXPEXT']) / 4
+    compatibility = (closeness['EXPEXT'] + closeness['IMPDIS'] + 
+                    closeness['ATTDEP'] + closeness['SENTIM']) / 4
+
+    # Interests/Hobbies Factor : +/-10% compatibility
+
 
     return compatibility
