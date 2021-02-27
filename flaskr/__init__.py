@@ -15,15 +15,18 @@ There are limits! See documentation:
 https://finnhub.io/docs/api
 """
 
-def create_app():
+def create_app(test_config=None):
 	app = Flask(__name__, instance_relative_config=True)
 	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 
-	app.config.from_mapping(
-        SECRET_KEY=os.urandom(24),
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
-
+	# Load config (if it exists) or take a test config
+	if test_config is None:
+		app.config.from_mapping(
+			SECRET_KEY=os.urandom(24),
+			DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+		)
+	else:
+		app.config.from_mapping(test_config)
     # Ensure the instance folder exists
 	try:
 		os.makedirs(app.instance_path)
@@ -68,6 +71,7 @@ def create_app():
 			# Code below uses Flask session to store data which can be moved to
 			# DB later.
 			if error is None:
+				session['updated'] = True
 				if 'stock_dict' in session:
 					(session['stock_dict'])[stock_symbol] = volume
 					session.modified = True
@@ -99,8 +103,10 @@ def create_app():
 				error = "Invalid ID"
 
 			#TODO: result generation and presentation
+			# This routes to a placeholder route
+			# Will probably have to rename this route
 			if error is None:
-				return render_template('results.html')
+				return redirect(url_for('compat'))
 			else:
 				flash(error)
 				return render_template('compare.html')
@@ -108,22 +114,20 @@ def create_app():
 		else:
 			return render_template('compare.html')
 
-
+	# Present_id page (generates session id or code)
 	@app.route('/results')
 	def results():
-		return render_template(results.html)
-
-	# Present_id page (generates session id or code)
-	@app.route('/present_id')
-	def present_id():
 		person = {}
-		if 'stock_dict' in session:
-			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
-			print(person)
-		else:
+		if not 'stock_dict' in session:
 			return redirect(url_for('index'))
-		if 'code' in session:
-			return render_template('present_id.html', code=session['code'], warning=True)
+		if session['updated']:
+			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
+			session['person'] = person
+		
+		# If code has already been generated and the input portfolio is unchanged, 
+		# skip code generation and persisting to db
+		if 'code' in session and not session['updated']:
+			return render_template('results.html', code=session['code'], warning=True, person=session['person'])
 		else:
 
 			# Generates a 10 character random string
@@ -134,20 +138,20 @@ def create_app():
 
 			# Person sends link to partner
 			print(session)
-			return render_template('present_id.html', code=code)
+			session['updated'] = False
+			return render_template('results.html', code=code, person=person)
+
+	@app.route('/compat')
+	def compat():
+		return redirect(url_for('index'))
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
 	def remove(key):
 		if 'stock_dict' in session:
 			session['stock_dict'].pop(key, None)
+			session['updated'] = True
 			session.modified = True
 		return redirect(url_for('index'))
-
-	# Comparison page
-	@app.route('/compare/<code>')
-	def partner_validated(code):
-		# TODO: Implement compare.html
-		return 'partner finished'
 
 	return app

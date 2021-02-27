@@ -1,4 +1,4 @@
-import math
+from math import exp, floor
 
 # TODO: cache calls to Finnhub
 def generate_profile(portfolio, finnhub_client):
@@ -52,7 +52,7 @@ def generate_profile(portfolio, finnhub_client):
         
         E = 19.23*(MB - 1.7364) + 0.0006*(Size + 4124.38)
         I = 18.518*(MB - 1.80656) + 0.0005*(12679.64 - Size)
-        S = 6.757*(2.37625 - MB) + 0.0295*(Size - 4895.96)
+        S = 13.514*(2.37625 - MB)
         A = 0.001*(14271.26 - Size)
 
         intermediates.append({'EXPEXT': E,
@@ -68,10 +68,10 @@ def generate_profile(portfolio, finnhub_client):
         S = S + (inter['NUM']/total)*inter['SENTIM']
         A = A + (inter['NUM']/total)*inter['ATTDEP']
     # 472, 442, 14, 110
-    person['EXPEXT'] = (2/(1+math.exp(-E/118))) - 1
-    person['IMPDIS'] = (2/(1+math.exp(-I/111))) - 1
-    person['SENTIM'] = (2/(1+math.exp(-S/4))) - 1
-    person['ATTDEP'] = (2/(1+math.exp(-A/28))) - 1
+    person['EXPEXT'] = floor(100/(1+exp(-E/118)))
+    person['IMPDIS'] = floor(100/(1+exp(-I/111)))
+    person['SENTIM'] = floor(100/(1+exp(-S/4)))
+    person['ATTDEP'] = floor(100/(1+exp(-A/28)))
     return person
 
 def compare_profiles(p1, p2, finnhub_client):
