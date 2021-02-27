@@ -85,6 +85,9 @@ h1 {
 h2 {
   font-weight: normal;
 }
+p {
+  margin: 0 15px 0 15px;
+}
 
 h1, h2 {
 	margin: 10px;
@@ -223,8 +226,12 @@ input[type=submit]:hover {
   body, a, input {
       font-size: 30px;
   }
+  input[type=submit] {
+    font-size: 30px;
+    margin-top: 20px;
+  }
   h1 {
-    font-size: 2.3em;
+    font-size: 2em;
   }
 }
 @media (max-width: 480px)
@@ -232,7 +239,10 @@ input[type=submit]:hover {
   body, a, input {
       font-size: 20px;
   }
+  input[type=submit] {
+    font-size: 20px;
+  }
   h1 {
-    font-size: 1.3em;
+    font-size: 1.7em;
   }
 }
