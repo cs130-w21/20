@@ -68,10 +68,10 @@ def generate_profile(portfolio, finnhub_client):
         S = S + (inter['NUM']/total)*inter['SENTIM']
         A = A + (inter['NUM']/total)*inter['ATTDEP']
     # 472, 442, 14, 110
-    person['EXPEXT'] = floor((200/(1+exp(-E/118))) - 100)
-    person['IMPDIS'] = floor((200/(1+exp(-I/111))) - 100)
-    person['SENTIM'] = floor((200/(1+exp(-S/4))) - 100)
-    person['ATTDEP'] = floor((200/(1+exp(-A/28))) - 100)
+    person['EXPEXT'] = floor(100/(1+exp(-E/118)))
+    person['IMPDIS'] = floor(100/(1+exp(-I/111)))
+    person['SENTIM'] = floor(100/(1+exp(-S/4)))
+    person['ATTDEP'] = floor(100/(1+exp(-A/28)))
     return person
 
 def compare_profiles(p1, p2, finnhub_client):
