@@ -82,6 +82,9 @@ a {
 h1 {
 	padding-top: 20px;
 }
+h2 {
+  font-weight: normal;
+}
 
 h1, h2 {
 	margin: 10px;
@@ -106,6 +109,30 @@ input {
 
 .container .info {
 	padding: 20px;
+}
+input[type=text] {
+    padding:5px; 
+    border:2px solid black; 
+    border-radius: 0px;
+}
+
+input[type=text]:focus {
+    border:2px royalblue solid;
+    border-radius: 0px;
+}
+
+input[type=submit] {
+    margin-top: 5px;
+    font-size: 16px;
+    padding: 10px 15px;
+    background:#9eaab7; 
+    color: white;
+    border:1px royalblue solid;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background: #0080ff;
 }
 
 
@@ -189,4 +216,23 @@ input {
 }
 .pad-m {
   margin-top: 35px;
+}
+
+@media (min-width: 481px) and (max-width: 768px)
+{
+  body, a, input {
+      font-size: 30px;
+  }
+  h1 {
+    font-size: 2.3em;
+  }
+}
+@media (max-width: 480px)
+{
+  body, a, input {
+      font-size: 20px;
+  }
+  h1 {
+    font-size: 1.3em;
+  }
 }
