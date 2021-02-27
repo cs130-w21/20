@@ -87,6 +87,7 @@ h2 {
 }
 p {
   margin: 0 15px 0 15px;
+  text-align: center;
 }
 
 h1, h2 {
@@ -220,12 +221,16 @@ input[type=submit]:hover {
 .pad-m {
   margin-top: 35px;
 }
+.text-center{
+  text-align: center;
+}
 
 @media (min-width: 481px) and (max-width: 768px)
 {
   body, a, input {
       font-size: 30px;
   }
+  .logo {font-size: 32px;}
   input[type=submit] {
     font-size: 30px;
     margin-top: 20px;
@@ -233,11 +238,14 @@ input[type=submit]:hover {
   h1 {
     font-size: 2em;
   }
+  .collapsible, .content{
+    width:90%;
+  }
 }
 @media (max-width: 480px)
 {
   body, a, input {
-      font-size: 20px;
+    font-size: 20px;
   }
   input[type=submit] {
     font-size: 20px;
@@ -245,4 +253,9 @@ input[type=submit]:hover {
   h1 {
     font-size: 1.7em;
   }
+  .collapsible, .content{
+    width:95%;
+    font-size: 20px;
+  }
+  #about {display: none;}
 }
