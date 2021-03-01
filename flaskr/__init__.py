@@ -5,7 +5,7 @@ from flask import (
 	flash,
 )
 from finnhub import Client as make_client
-from . import algorithm
+from flaskr import algorithm
 """
 Elvis' Finnhub API keys
 Sandbox API Key: sandbox_c0bfrg748v6to0roveg0
@@ -50,7 +50,7 @@ def create_app(test_config=None):
 		pass
 
 	# Initialize db
-	from . import db
+	from flaskr import db
 	db.init_app(app)
 
 	# Fix browser caching for css
