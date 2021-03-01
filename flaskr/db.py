@@ -10,7 +10,7 @@ def get_profile(user_id):
             'SELECT * FROM profiles WHERE uid = ?', (user_id,)
         ).fetchone()
 
-    return profile
+    return profile  # profile['profile'] is a string
 
 def create_profile(user_id, profile={}):
     db = get_db()

@@ -1,4 +1,5 @@
 from math import exp, floor
+import sys, ast
 
 # TODO: cache calls to Finnhub
 def generate_profile(portfolio, finnhub_client):
@@ -34,18 +35,23 @@ def generate_profile(portfolio, finnhub_client):
         'IMPDIS': 0.0,
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
+        'AFFLUE': 0.0,      # float: total dollar value of portfolio 
+        'HOBBIE': 0.0       # int: favorite hobbies determined by market sectors
     }
-    total = 0
+    totalNumShares = 0
+    totalValueShares = 0
     intermediates = []
+    sectors = {}
     #TODO: implement OLS snipping
-    
-    for symbol, num in portfolio.items():
-        total = total + int(num)
-        financials = finnhub_client.company_basic_financials(symbol, 'all')['metric']
+
+    for sym, num in portfolio.items():
+        totalNumShares = totalNumShares + int(num)
+        financials = finnhub_client.company_basic_financials(sym, 'all')['metric']
         price = (float(financials['52WeekHigh']) + float(financials['52WeekLow']))/2.0
         
         MB = price / float(financials['bookValuePerShareAnnual'])
         Size = float(financials['marketCapitalization'])
+
         # Size is in units: $ million
         if Size > 14e3: # cap the market cap
             Size = 14e3
@@ -61,20 +67,55 @@ def generate_profile(portfolio, finnhub_client):
             'SENTIM': S,
             'NUM': int(num)
         })
+
+        totalValueShares = totalValueShares + (price * int(num))
+
+        # Assign sector weight based on number of shares owned in sector
+        # Currently finnhub is returning random words for most of the fields of this
+        # call, including finnhubIndustry. Until this is fixed, the interests factor
+        # will not work correctly
+        companyProfile = finnhub_client.company_profile2(symbol=sym)
+        sector = companyProfile['finnhubIndustry']
+        if sector in sectors:
+            sectors[sector] = sectors[sector] + num
+        else:
+            sectors[sector] = num
+
     E = I = S = A = 0.0
     for inter in intermediates:
-        E = E + (inter['NUM']/total)*inter['EXPEXT']
-        I = I + (inter['NUM']/total)*inter['IMPDIS']
-        S = S + (inter['NUM']/total)*inter['SENTIM']
-        A = A + (inter['NUM']/total)*inter['ATTDEP']
+        E = E + (inter['NUM']/totalNumShares)*inter['EXPEXT']
+        I = I + (inter['NUM']/totalNumShares)*inter['IMPDIS']
+        S = S + (inter['NUM']/totalNumShares)*inter['SENTIM']
+        A = A + (inter['NUM']/totalNumShares)*inter['ATTDEP']
     # 472, 442, 14, 110
     person['EXPEXT'] = floor(100/(1+exp(-E/118)))
     person['IMPDIS'] = floor(100/(1+exp(-I/111)))
     person['SENTIM'] = floor(100/(1+exp(-S/4)))
     person['ATTDEP'] = floor(100/(1+exp(-A/28)))
+
+    # Assign affluence rank
+    # based on U.S. Census Bureau 2021 report of median household wealth quintiles
+    if totalValueShares < 4715:                # bottom 20%
+        person['AFFLUE'] = 0
+    elif 4715 <= totalValueShares < 34940:
+        person['AFFLUE'] = 1
+    elif 34940 <= totalValueShares < 80120:    # middle 20%
+        person['AFFLUE'] = 2
+    elif 80120 <= totalValueShares < 188300:
+        person['AFFLUE'] = 3
+    elif 188300 <= totalValueShares < 554700:
+        person['AFFLUE'] = 4
+    else:                                       # top 20%
+        person['AFFLUE'] = 5
+
+    # Find most popular sector
+    # If there is a tie, only chooses the first sector found
+    if sectors:
+        person['HOBBIE'] = max(sectors, key=sectors.get)
+
     return person
 
-def compare_profiles(person1, person2, finnhub_client):
+def compare_profiles(person1, person2):
     """
     Generates personality profile from portfolio
 
@@ -89,9 +130,9 @@ def compare_profiles(person1, person2, finnhub_client):
 
     Returns
     -------
-    (str, int) dict
-        Dictionary of personality factors and values 
-        for compatibility between Person 1 and 2.
+    compatibility:
+        Percentage describing compatibility between
+        two profiles, range 0-100
     """
 
     # closeness of categories
@@ -113,7 +154,12 @@ def compare_profiles(person1, person2, finnhub_client):
     compatibility = (closeness['EXPEXT'] + closeness['IMPDIS'] + 
                     closeness['ATTDEP'] + closeness['SENTIM']) / 4
 
-    # Interests/Hobbies Factor : +/-10% compatibility
+    # Affluence (amount of money invested in market) Factor: +/-15% based on wealth bracket
+    affDiff = abs(person1['AFFLUE'] - person2['AFFLUE']) - 2.5
+    compatibility += affDiff * -6
 
+    # Interests/Hobbies Factor : +10% compatibility on most popular sector match
+    if (person1['HOBBIE'] == person2['HOBBIE']):
+        compatibility += 10
 
-    return compatibility
+    return round(max(0, min(compatibility, 100)), 1)        # clamp in range 0-100
