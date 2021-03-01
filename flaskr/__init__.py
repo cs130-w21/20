@@ -1,4 +1,4 @@
-import os, string, random
+import os, string, random, sys, ast
 
 from flask import (
 	Flask, render_template, url_for, session, redirect, request,
@@ -94,18 +94,29 @@ def create_app(test_config=None):
 		if request.method == 'POST':
 			uid1 = request.form['person1']
 			uid2 = request.form['person2']
+			person1 = db.get_profile(uid1)
+			person2 = db.get_profile(uid2)
 			error = None
 
 			if uid1 == uid2:
 				error = "IDs cannot be the same!"
+			elif person1==None:
+				error = "Invalid ID for first person"
+			elif person2==None:
+				error = "Invalid ID for second person"
 
-			elif db.get_profile(uid1)==None or db.get_profile(uid2)==None:
-				error = "Invalid ID"
-
-			#TODO: result generation and presentation
-			# This routes to a placeholder route
-			# Will probably have to rename this route
 			if error is None:
+				# Convert db.get_profile string to dict
+				p1 = ast.literal_eval(person1['profile']) # May still need sanitization
+				p2 = ast.literal_eval(person2['profile'])
+
+				session['compatPercent'] = algorithm.compare_profiles(p1, p2)
+				
+				print("Compatibility Percentage: " + str(session['compatPercent']), file=sys.stderr)
+				
+				# TODO: present compatibility result
+				# Currently redirects to home page
+
 				return redirect(url_for('compat'))
 			else:
 				flash(error)
