@@ -8,9 +8,9 @@
 	{% endfor %}
     <form method="post" class="flex-center">
 	    <label for="stock">Stock Symbol</label>
-	    <input name="stock" id="stock" required>
+	    <input type="text" name="stock" id="stock" required>
 	    <label for="volume">Number of Shares</label>
-	    <input name="volume" id="volume" required>
+	    <input type="text" name="volume" id="volume" required>
 	    <input type="submit" value="Add Stock">
   	</form>
   	{% if stock_dict is none %}
