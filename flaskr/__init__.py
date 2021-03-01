@@ -16,6 +16,22 @@ https://finnhub.io/docs/api
 """
 
 def create_app(test_config=None):
+	"""
+	Application factory function to set up the Flask application
+
+	Endpoints
+	---------
+	index:
+		Reads user stock portfolio input from HTML form and stores this
+		information in a dictionary (session).
+	compare:
+		Reads user ID inputs from HTML form and generates compatability score.
+	results:
+		Generates profile + user ID and presents this information to user.
+	remove/<key>:
+		Removes stock symbol key from session.
+	"""
+
 	app = Flask(__name__, instance_relative_config=True)
 	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
 
@@ -123,8 +139,8 @@ def create_app(test_config=None):
 		if session['updated']:
 			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
 			session['person'] = person
-		
-		# If code has already been generated and the input portfolio is unchanged, 
+
+		# If code has already been generated and the input portfolio is unchanged,
 		# skip code generation and persisting to db
 		if 'code' in session and not session['updated']:
 			return render_template('results.html', code=session['code'], warning=True, person=session['person'])
