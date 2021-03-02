@@ -36,7 +36,7 @@ def generate_profile(portfolio, finnhub_client):
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
         'AFFLUE': 0.0,      # float: total dollar value of portfolio 
-        'HOBBIE': 0.0       # int: favorite hobbies determined by market sectors
+        'HOBBIE': ""        # str: favorite hobby based on most popular sector by num of shares
     }
     totalNumShares = 0
     totalValueShares = 0
@@ -71,9 +71,6 @@ def generate_profile(portfolio, finnhub_client):
         totalValueShares = totalValueShares + (price * int(num))
 
         # Assign sector weight based on number of shares owned in sector
-        # Currently finnhub is returning random words for most of the fields of this
-        # call, including finnhubIndustry. Until this is fixed, the interests factor
-        # will not work correctly
         companyProfile = finnhub_client.company_profile2(symbol=sym)
         sector = companyProfile['finnhubIndustry']
         if sector in sectors:
@@ -135,31 +132,45 @@ def compare_profiles(person1, person2):
         two profiles, range 0-100
     """
 
-    # closeness of categories
-    closeness = {'EXPEXT': 0.0,
+    # Compatibility Profile
+    compatProfile = {'EXPEXT': 0.0,
         'IMPDIS': 0.0,
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
+        'AFFDIF': 0,        # int: difference in affluence quintile
+        'HOBCHK': "",       # str: name of most popular sector if matched, "" otherwise
+        'COMPAT': 0.0       # float: compatibility percentage
     }
+
+    # Check keys exist in profiles
+    if not all (k in person1 for k in ('EXPEXT','IMPDIS','ATTDEP','SENTIM','AFFLUE','HOBBIE')):
+        print("Person1 profile is missing keys", file=sys.stderr)
+        return compatProfile
+    elif not all (k in person2 for k in ('EXPEXT','IMPDIS','ATTDEP','SENTIM','AFFLUE','HOBBIE')):
+        print("Person2 profile is missing keys", file=sys.stderr)
+        return compatProfile
     
     # closeness(a1, a2) = aMax - |a1 - a2|
     #       aMax = max(range of a)
     #       range of a = range of a1 = range of a2 = 0->100
-    closeness['EXPEXT'] = 100 - floor(abs(person1['EXPEXT'] - person2['EXPEXT']))
-    closeness['IMPDIS'] = 100 - floor(abs(person1['IMPDIS'] - person2['IMPDIS']))
-    closeness['ATTDEP'] = 100 - floor(abs(person1['ATTDEP'] - person2['ATTDEP']))
-    closeness['SENTIM'] = 100 - floor(abs(person1['SENTIM'] - person2['SENTIM']))
+    compatProfile['EXPEXT'] = 100 - floor(abs(person1['EXPEXT'] - person2['EXPEXT']))
+    compatProfile['IMPDIS'] = 100 - floor(abs(person1['IMPDIS'] - person2['IMPDIS']))
+    compatProfile['ATTDEP'] = 100 - floor(abs(person1['ATTDEP'] - person2['ATTDEP']))
+    compatProfile['SENTIM'] = 100 - floor(abs(person1['SENTIM'] - person2['SENTIM']))
 
-    # Simple average
-    compatibility = (closeness['EXPEXT'] + closeness['IMPDIS'] + 
-                    closeness['ATTDEP'] + closeness['SENTIM']) / 4
+    # Simple average of personality category closeness
+    compatibility = (compatProfile['EXPEXT'] + compatProfile['IMPDIS'] + 
+                    compatProfile['ATTDEP'] + compatProfile['SENTIM']) / 4
 
     # Affluence (amount of money invested in market) Factor: +/-15% based on wealth bracket
-    affDiff = abs(person1['AFFLUE'] - person2['AFFLUE']) - 2.5
-    compatibility += affDiff * -6
+    compatProfile['AFFDIF'] = abs(person1['AFFLUE'] - person2['AFFLUE'])
+    compatibility += (compatProfile['AFFDIF'] - 2.5) * -6
 
     # Interests/Hobbies Factor : +10% compatibility on most popular sector match
     if (person1['HOBBIE'] == person2['HOBBIE']):
         compatibility += 10
+        compatProfile['HOBCHK'] = person1['HOBBIE']
 
-    return round(max(0, min(compatibility, 100)), 1)        # clamp in range 0-100
+    compatProfile['COMPAT'] = round(max(0, min(compatibility, 100)), 1)     # clamp in range 0-100
+
+    return compatProfile

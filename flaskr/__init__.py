@@ -111,8 +111,8 @@ def create_app(test_config=None):
 				p2 = ast.literal_eval(person2['profile'])
 
 				session['compatPercent'] = algorithm.compare_profiles(p1, p2)
-				
-				print("Compatibility Percentage: " + str(session['compatPercent']), file=sys.stderr)
+				print(session['compatPercent'])
+				print("Compatibility Percentage: " + str(session['compatPercent']['COMPAT']), file=sys.stderr)
 				
 				# TODO: present compatibility result
 				# Currently redirects to home page
