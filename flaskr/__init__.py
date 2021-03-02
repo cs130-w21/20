@@ -1,4 +1,4 @@
-import os, string, random, sys, ast
+import os, string, secrets, sys, ast
 
 from flask import (
 	Flask, render_template, url_for, session, redirect, request,
@@ -50,6 +50,19 @@ def create_app(test_config=None):
 									 endpoint, filename)
 				values['q'] = int(os.stat(file_path).st_mtime)
 		return url_for(endpoint, **values)
+
+	# Attempts to generate an unused UID within limit number of attempts.
+	# If all attempts are expended (extremely unlikely to actually happen with default of 5),
+	# the last generated UID is returned.
+	def generate_uid(limit=5):
+		uid = ""
+		attempts = 0
+		while attempts < limit:
+			uid = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for i in range(10))
+			if db.get_profile(uid) == None:
+				break
+			attempts += 1
+		return uid
 
 	# Home page
 	@app.route('/', methods=['GET', 'POST'])
@@ -142,7 +155,7 @@ def create_app(test_config=None):
 		else:
 
 			# Generates a 10 character random string
-			code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+			code = generate_uid()
 			session['code'] = code
 
 			db.create_profile(code, person)
