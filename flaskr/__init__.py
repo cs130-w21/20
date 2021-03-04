@@ -167,7 +167,8 @@ def create_app(test_config=None):
 
 	@app.route('/compat')
 	def compat():
-		return redirect(url_for('index'))
+		results = session['compatPercent']
+		return render_template('compat.html', results=results)
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
