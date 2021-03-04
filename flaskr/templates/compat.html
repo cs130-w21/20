@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<h1>{% block title %}Your Compatibility is {{ results['COMPAT'] }}% !{% endblock %}</h1>
+	<p></p>
+    <div class="progress" style="width:70%">
+        <div class="progress-bar progress-bar-striped active" role="progressbar"
+        aria-valuenow="{{ results['COMPAT'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ results['COMPAT'] }}%">
+          {{ results['COMPAT'] }}%
+        </div>
+    </div>
+	<p></p>
+
+	<button type="button" class="collapsible pad-s">(E) Exploratory Excitability and Extravagance: {{ results['EXPEXT'] }}%<span>+</span></button>
+	<div class="content">
+	  <p><b>Exploratory excitability</b> refers to one's willingness and desire to seek new things and avoid boredom. <b>Extravagance</b> refers to one's preference for spending money over saving money. Thus, a higher score suggests you like new stimuli, utilizing the money at your disposal, and portfolios with more <ins>growth & large capitalization stocks</ins>.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(I) Impulsiveness and Disorderliness: {{ results['IMPDIS'] }}%<span>+</span></button>
+	<div class="content">
+	  <p><b>Impulsiveness</b> refers to one's willingness to make decisions based on hunches without necessarily having complete information. <b>Disorderliness</b> refers to one's willingness to do things their own way without much regard for routines or rules. Thus, a higher score suggests you take risks, do not follow conventions, and have a portfolio with more <ins>growth & small capitalization stocks</ins>.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(A) Attachment and Dependence: {{ results['ATTDEP'] }}%<span>+</span></button>
+	<div class="content">
+	  <p><b>Attachment</b> refers to one's tendency to be generally warm and open with others. <b>Dependence</b> refers to one's willingness and desire to fit into a social group. Thus, a higher score suggests you are more amicable, enjoy interacting with people, and have a portfolio with more <ins>small capitalization stocks</ins>.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(S) Sentimentality and Empathy: {{ results['SENTIM'] }}%<span>+</span></button>
+	<div class="content">
+	  <p><b>Sentimentality</b> refers to one's tendency to be affected by emotional stimuli, whether it be other people or works of art. <b>Empathy</b> refers to one's ability to better understand and share the feelings of others. Thus, a higher score suggests you are more led by your emotions, understand the emotions of others, and have a portfolio with more <ins>value and small capitalization stocks</ins>.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">Investment (0-5): {{ results['INVDIF'] }}<span>+</span></button>
+	<div class="content">
+	  <p><b>HELLO</b> content</ins>.
+	  </p>
+	</div>
+
+	<button type="button" class="collapsible">Mutual Hobbies: {{ results['HOBCHK'] }}<span>+</span></button>
+	<div class="content">
+	  <p><b>HELLO</b> content</ins>.
+	  </p>
+	</div>
+{% endblock %}
