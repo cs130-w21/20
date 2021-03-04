@@ -35,7 +35,7 @@ def generate_profile(portfolio, finnhub_client):
         'IMPDIS': 0.0,
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
-        'AFFLUE': 0.0,      # float: total dollar value of portfolio 
+        'INVEST': 0.0,      # float: total dollar value of portfolio 
         'HOBBIE': ""        # str: favorite hobby based on most popular sector by num of shares
     }
     totalNumShares = 0
@@ -90,20 +90,20 @@ def generate_profile(portfolio, finnhub_client):
     person['SENTIM'] = floor(100/(1+exp(-S/4)))
     person['ATTDEP'] = floor(100/(1+exp(-A/28)))
 
-    # Assign affluence rank
+    # Assign investment rank
     # based on U.S. Census Bureau 2021 report of median household wealth quintiles
     if totalValueShares < 4715:                # bottom 20%
-        person['AFFLUE'] = 0
+        person['INVEST'] = 0
     elif 4715 <= totalValueShares < 34940:
-        person['AFFLUE'] = 1
+        person['INVEST'] = 1
     elif 34940 <= totalValueShares < 80120:    # middle 20%
-        person['AFFLUE'] = 2
+        person['INVEST'] = 2
     elif 80120 <= totalValueShares < 188300:
-        person['AFFLUE'] = 3
+        person['INVEST'] = 3
     elif 188300 <= totalValueShares < 554700:
-        person['AFFLUE'] = 4
+        person['INVEST'] = 4
     else:                                       # top 20%
-        person['AFFLUE'] = 5
+        person['INVEST'] = 5
 
     # Find most popular sector
     # If there is a tie, only chooses the first sector found
@@ -137,16 +137,16 @@ def compare_profiles(person1, person2):
         'IMPDIS': 0.0,
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
-        'AFFDIF': 0,        # int: difference in affluence quintile
+        'AFFDIF': 0,        # int: difference in investment quintile
         'HOBCHK': "",       # str: name of most popular sector if matched, "" otherwise
         'COMPAT': 0.0       # float: compatibility percentage
     }
 
     # Check keys exist in profiles
-    if not all (k in person1 for k in ('EXPEXT','IMPDIS','ATTDEP','SENTIM','AFFLUE','HOBBIE')):
+    if not all (k in person1 for k in ('EXPEXT','IMPDIS','ATTDEP','SENTIM','INVEST','HOBBIE')):
         print("Person1 profile is missing keys", file=sys.stderr)
         return compatProfile
-    elif not all (k in person2 for k in ('EXPEXT','IMPDIS','ATTDEP','SENTIM','AFFLUE','HOBBIE')):
+    elif not all (k in person2 for k in ('EXPEXT','IMPDIS','ATTDEP','SENTIM','INVEST','HOBBIE')):
         print("Person2 profile is missing keys", file=sys.stderr)
         return compatProfile
     
@@ -162,8 +162,8 @@ def compare_profiles(person1, person2):
     compatibility = (compatProfile['EXPEXT'] + compatProfile['IMPDIS'] + 
                     compatProfile['ATTDEP'] + compatProfile['SENTIM']) / 4
 
-    # Affluence (amount of money invested in market) Factor: +/-15% based on wealth bracket
-    compatProfile['AFFDIF'] = abs(person1['AFFLUE'] - person2['AFFLUE'])
+    # Investment (amount of money invested in market) Factor: +/-15% based on wealth bracket
+    compatProfile['AFFDIF'] = abs(person1['INVEST'] - person2['INVEST'])
     compatibility += (compatProfile['AFFDIF'] - 2.5) * -6
 
     # Interests/Hobbies Factor : +10% compatibility on most popular sector match
