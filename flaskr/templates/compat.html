@@ -60,6 +60,16 @@
 	    </div>
 	{% endif %}
 <script>
+	function adjustCompatForPhone(x, iscore) {
+	  if (x.matches) { // If media query matches
+	  	for (i = 1; i <= 5; i++) {
+	  		if (i == iscore) continue;
+	  		document.getElementById("i"+i).style.display = "none";
+	  		document.getElementById("d"+i).style.display = "none";
+	  	}
+	  } 
+	}
+
 	// QUESTION: what's the range of INVDIF? 0-5?
 	var iscore = {{ results['INVDIF']|safe }};
 	if (iscore < 1) {iscore = 1;}
@@ -67,6 +77,11 @@
 	document.getElementById("i"+iscore).style.color = "black";
 	document.getElementById("i"+iscore).style.fontSize = "3.5em";
 	document.getElementById("d"+iscore).style.color = "black";
+
+	// phone screen
+	var x = window.matchMedia("(max-width: 400px)");
+	adjustCompatForPhone(x, iscore);
+	x.addListener(adjustCompatForPhone);
 
 </script>
 {% endblock %}

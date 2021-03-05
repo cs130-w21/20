@@ -40,6 +40,10 @@ a {
   color: white;
   text-decoration: none;
 }
+.logo a:hover{
+  color: white;
+  text-decoration: none;
+}
 .logo {
     font-size: 20px;
     padding: 7.5px 10px 7.5px 0;
@@ -201,6 +205,10 @@ input[type=submit]:hover {
 .active, .collapsible:hover {
   background-color: #555;
   color: white;
+  outline: none;
+}
+.active, .collapsible:focus{
+  outline: none;
 }
 .collapsible span {
   float: right;
@@ -244,7 +252,7 @@ input[type=submit]:hover {
   margin: 5px;
   font-size: 3em;
   text-align: center;
-  color: #888;
+  color: #999;
 }
 .ichild.num {
   margin: auto;
@@ -269,6 +277,9 @@ input[type=submit]:hover {
   .collapsible, .content{
     width:90%;
   }
+  .iparent {
+    width:90%;
+  }
 }
 @media (max-width: 480px)
 {
@@ -284,6 +295,9 @@ input[type=submit]:hover {
   .collapsible, .content{
     width:95%;
     font-size: 20px;
+  }
+  .iparent {
+    width: 100%;
   }
   #about {display: none;}
 }
