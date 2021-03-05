@@ -1,4 +1,4 @@
-import os, string, random
+import os, string, secrets, sys, ast
 
 from flask import (
 	Flask, render_template, url_for, session, redirect, request,
@@ -67,6 +67,19 @@ def create_app(test_config=None):
 				values['q'] = int(os.stat(file_path).st_mtime)
 		return url_for(endpoint, **values)
 
+	# Attempts to generate an unused UID within limit number of attempts.
+	# If all attempts are expended (extremely unlikely to actually happen with default of 5),
+	# the last generated UID is returned.
+	def generate_uid(limit=5):
+		uid = ""
+		attempts = 0
+		while attempts < limit:
+			uid = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for i in range(10))
+			if db.get_profile(uid) == None:
+				break
+			attempts += 1
+		return uid
+
 	# Home page
 	@app.route('/', methods=['GET', 'POST'])
 	def index():
@@ -110,18 +123,29 @@ def create_app(test_config=None):
 		if request.method == 'POST':
 			uid1 = request.form['person1']
 			uid2 = request.form['person2']
+			person1 = db.get_profile(uid1)
+			person2 = db.get_profile(uid2)
 			error = None
 
 			if uid1 == uid2:
 				error = "IDs cannot be the same!"
+			elif person1==None:
+				error = "Invalid ID for first person"
+			elif person2==None:
+				error = "Invalid ID for second person"
 
-			elif db.get_profile(uid1)==None or db.get_profile(uid2)==None:
-				error = "Invalid ID"
-
-			#TODO: result generation and presentation
-			# This routes to a placeholder route
-			# Will probably have to rename this route
 			if error is None:
+				# Convert db.get_profile string to dict
+				p1 = ast.literal_eval(person1['profile']) # May still need sanitization
+				p2 = ast.literal_eval(person2['profile'])
+
+				session['compatPercent'] = algorithm.compare_profiles(p1, p2)
+				print(session['compatPercent'])
+				print("Compatibility Percentage: " + str(session['compatPercent']['COMPAT']), file=sys.stderr)
+				
+				# TODO: present compatibility result
+				# Currently redirects to home page
+
 				return redirect(url_for('compat'))
 			else:
 				flash(error)
@@ -147,7 +171,7 @@ def create_app(test_config=None):
 		else:
 
 			# Generates a 10 character random string
-			code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+			code = generate_uid()
 			session['code'] = code
 
 			db.create_profile(code, person)

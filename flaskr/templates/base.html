@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
     <nav>
 	  <ul class="menu">
-	    <li class="logo"><a href="{{ url_for('index')}}">Stonks</a></li>
-	    <li class="item"><a href="#">About</a></li>
+	    <li class="logo"><a href="{{ url_for('index')}}">StockMeetsBagel</a></li>
+	    <li class="item" id="about"><a href="#">About</a></li>
 	    </li>
 	    <li class="item button"><a href="{{ url_for('compare')}}">Compare</a></li>
 	    <li class="toggle"><a href="#"><i class="fas fa-bars"></i></a></li>
