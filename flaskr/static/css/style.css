@@ -34,6 +34,11 @@ a {
     list-style-type: none;
     display: flex;
     align-items: center;
+    margin: 0;
+}
+.menu a{
+  color: white;
+  text-decoration: none;
 }
 .logo {
     font-size: 20px;
@@ -187,7 +192,7 @@ input[type=submit]:hover {
   color: white;
   cursor: pointer;
   padding: 18px;
-  width: 50%;
+  width: 60%;
   border: none;
   text-align: left;
   outline: none;
@@ -204,7 +209,7 @@ input[type=submit]:hover {
   opacity: 0;
 }
 .content {
-  width: 50%;
+  width: 60%;
   padding: 0 16px;
   background-color: #f1f1f1;
   max-height: 0;
@@ -223,6 +228,29 @@ input[type=submit]:hover {
 }
 .text-center{
   text-align: center;
+}
+
+/* Compatibility */
+.compat {
+  font-size: 1.5em;
+}
+.iparent {
+  display: flex;
+  flex-wrap: wrap;
+  width: 70%;
+}
+.ichild {
+  flex: 1 0 10%;
+  margin: 5px;
+  font-size: 3em;
+  text-align: center;
+  color: #888;
+}
+.ichild.num {
+  margin: auto;
+}
+.ichild.des {
+  font-size: 16px;
 }
 
 @media (min-width: 481px) and (max-width: 768px)
