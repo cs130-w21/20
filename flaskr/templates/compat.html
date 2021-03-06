@@ -32,7 +32,7 @@
 	  </p>
 	</div>
 
-	<h2 class="pad-m text-center compat">Here's your <b>investment</b> score out of 5.</h2>
+	<h2 class="pad-m text-center compat">Here's your <b>investment</b> compatibility score out of 5.</h2>
 	<div class="iparent">
 		<div class="ichild num" id="i1">1</div>
 		<div class="ichild num" id="i2">2</div>
@@ -41,11 +41,11 @@
 		<div class="ichild num" id="i5">5</div>
 	</div>
 	<div class="iparent">
-		<div class="ichild des" id="d1">Your investment choices are virtually the same.</div>
-		<div class="ichild des" id="d2">Your investment choices are mostly aligned. </div>
+		<div class="ichild des" id="d1">Your investment choices differ largely.</div>
+		<div class="ichild des" id="d2">Your investment choices have little similarity.</div>
 		<div class="ichild des" id="d3">You and your partner have similar investing habits.</div>
-		<div class="ichild des" id="d4">Your investment choices have little similarity.</div>
-		<div class="ichild des" id="d5">Your investment choices differ largely.</div>
+		<div class="ichild des" id="d4">Your investment choices are mostly aligned. </div>
+		<div class="ichild des" id="d5">Your investment choices are virtually identical.</div>
 	</div>
 
 <script>
@@ -59,10 +59,11 @@
 	  } 
 	}
 
-	// QUESTION: what's the range of INVDIF? 0-5?
+	// range: 1-5
 	var iscore = {{ results['INVDIF']|safe }};
 	if (iscore < 1) {iscore = 1;}
 	if (iscore > 5) {iscore = 5;}
+	iscore = 6-iscore;
 	document.getElementById("i"+iscore).style.color = "black";
 	document.getElementById("i"+iscore).style.fontSize = "3.5em";
 	document.getElementById("d"+iscore).style.color = "black";
