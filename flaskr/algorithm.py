@@ -85,10 +85,10 @@ def generate_profile(portfolio, finnhub_client):
         S = S + (inter['NUM']/totalNumShares)*inter['SENTIM']
         A = A + (inter['NUM']/totalNumShares)*inter['ATTDEP']
     # 472, 442, 14, 110
-    person['EXPEXT'] = floor(100/(1+exp(-E/118)))
-    person['IMPDIS'] = floor(100/(1+exp(-I/111)))
-    person['SENTIM'] = floor(100/(1+exp(-S/4)))
-    person['ATTDEP'] = floor(100/(1+exp(-A/28)))
+    person['EXPEXT'] = floor(100/(1+exp(-E/120))) # Old: 118
+    person['IMPDIS'] = floor(100/(1+exp(-I/115))) # Old: 111
+    person['SENTIM'] = floor(100/(1+exp(-S/30))) # Old: 4
+    person['ATTDEP'] = floor(100/(1+exp(-A/30))) # Old: 28
 
     # Assign investment rank
     # based on U.S. Census Bureau 2021 report of median household wealth quintiles

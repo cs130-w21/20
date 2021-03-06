@@ -102,8 +102,8 @@ def create_app(test_config=None):
 			return render_template('index.html', stock_dict=None)
 
 	# Compare page
-	@app.route('/compare', methods=['GET', 'POST'])
-	def compare():
+	@app.route('/compare/<code>', methods=['GET', 'POST'])
+	def compare(code):
 		if request.method == 'POST':
 			uid1 = request.form['person1']
 			uid2 = request.form['person2']
@@ -130,10 +130,12 @@ def create_app(test_config=None):
 				return redirect(url_for('compat'))
 			else:
 				flash(error)
-				return render_template('compare.html')
-
+				return render_template('compare.html', code="")
 		else:
-			return render_template('compare.html')
+			if code == '<placeholder>':
+				return render_template('compare.html', code="")
+			else:
+				return render_template('compare.html', code=code)
 
 	# Present_id page (generates session id or code)
 	@app.route('/results')
