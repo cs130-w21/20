@@ -16,9 +16,6 @@ def generate_profile(portfolio, finnhub_client):
 
     #### Return Value
     **(str, int) dict** - Dictionary of personality factors and values. 
-    
-    #### Notes
-    ...
     """
 
     """
@@ -123,9 +120,6 @@ def compare_profiles(person1, person2):
 
     #### Return Value
     **(str, int) dict** - Dictionary of compatability factors and values.
-
-    #### Notes
-    ...
     """
 
     # Compatibility Profile
