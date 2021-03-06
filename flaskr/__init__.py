@@ -126,9 +126,6 @@ def create_app(test_config=None):
 				session['compatPercent'] = algorithm.compare_profiles(p1, p2)
 				print(session['compatPercent'])
 				print("Compatibility Percentage: " + str(session['compatPercent']['COMPAT']), file=sys.stderr)
-				
-				# TODO: present compatibility result
-				# Currently redirects to home page
 
 				return redirect(url_for('compat'))
 			else:
@@ -167,7 +164,8 @@ def create_app(test_config=None):
 
 	@app.route('/compat')
 	def compat():
-		return redirect(url_for('index'))
+		results = session['compatPercent']
+		return render_template('compat.html', results=results)
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')
