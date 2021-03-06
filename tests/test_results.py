@@ -28,7 +28,7 @@ def test_stock_in_session(client, app):
     with app.app_context():
         db = get_db()
         profile = db.execute(
-            'SELECT uid,profile FROM profiles WHERE profile LIKE \'%"EXPEXT": 88, "IMPDIS": 88%\';'
+            'SELECT uid,profile FROM profiles WHERE profile LIKE \'%"EXPEXT": 88, "IMPDIS": 87%\';'
         ).fetchone()
         assert profile is not None
     

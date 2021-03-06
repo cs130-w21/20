@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>{% block title %} Welcome to StockMeetsBagel {% endblock %}</h1>
-	<h2>Start by inputting your stonk information below</h2>
+	<h2>Start by inputting your stock information below</h2>
 	{% for message in get_flashed_messages() %}
 		<div class="flash">{{ message }}</div>
 	{% endfor %}
@@ -14,7 +14,7 @@
 	    <input type="submit" value="Add Stock✨">
   	</form>
   	{% if stock_dict is none %}
-	<p> Have a user ID already? Go to Compare</p>
+	<p> Have an ID already? Go to Compare</p>
 	{% else %}
   	<div class="selected-stocks table-container" role="table">
   		<div class="flex-table row" role="rowgroup">
