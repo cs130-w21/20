@@ -117,9 +117,14 @@ def create_app(test_config=None):
 				return render_template('index.html', stock_dict=session['stock_dict'])
 			return render_template('index.html', stock_dict=None)
 
+	# About page
+	@app.route('/about')
+	def about():
+		return render_template('about.html')
+
 	# Compare page
-	@app.route('/compare', methods=['GET', 'POST'])
-	def compare():
+	@app.route('/compare/<code>', methods=['GET', 'POST'])
+	def compare(code):
 		if request.method == 'POST':
 			uid1 = request.form['person1']
 			uid2 = request.form['person2']
@@ -142,17 +147,16 @@ def create_app(test_config=None):
 				session['compatPercent'] = algorithm.compare_profiles(p1, p2)
 				print(session['compatPercent'])
 				print("Compatibility Percentage: " + str(session['compatPercent']['COMPAT']), file=sys.stderr)
-				
-				# TODO: present compatibility result
-				# Currently redirects to home page
 
 				return redirect(url_for('compat'))
 			else:
 				flash(error)
-				return render_template('compare.html')
-
+				return render_template('compare.html', code="")
 		else:
-			return render_template('compare.html')
+			if code == '<placeholder>':
+				return render_template('compare.html', code="")
+			else:
+				return render_template('compare.html', code=code)
 
 	# Present_id page (generates session id or code)
 	@app.route('/results')
@@ -183,7 +187,8 @@ def create_app(test_config=None):
 
 	@app.route('/compat')
 	def compat():
-		return redirect(url_for('index'))
+		results = session['compatPercent']
+		return render_template('compat.html', results=results)
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')

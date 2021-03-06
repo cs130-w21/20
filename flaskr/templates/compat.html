@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>{% block title %}Your Compatibility is {{ results['COMPAT'] }}%{% endblock %}</h1>
+	<p></p>
+    <div class="progress" style="width:70%">
+        <div class="progress-bar-color" role="progressbar" style="width: {{ results['COMPAT'] }}%">
+          {{ results['COMPAT'] }}%
+        </div>
+    </div>
+	<p></p>
+
+	<h2 class="pad-m text-center compat">Here's how well you matched for each of these traits.</h2>
+	<button type="button" class="collapsible pad-s">(E) Exploratory Excitability and Extravagance: {{ results['EXPEXT'] }}%<span>+</span></button>
+	<div class="content">
+	  <p>A higher number in the <b>E</b> category indicates you and your partner have similar levels of adventurousness when it comes to finding enjoyment in performing activities in everyday life. <br><br>Partners with similar E scores find it easier to spend quality time together and tend to take pleasure in similar types of hobbies. They also share similar attitudes towards money management and financial decision-making, a critical cornerstone to every successful relationship. Thus, these types of couples will find it easier to maintain stability and sustain a long-term relationship. 
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(I) Impulsiveness and Disorderliness: {{ results['IMPDIS'] }}%<span>+</span></button>
+	<div class="content">
+	  <p>A higher number in the <b>I</b> category suggests you and your partner share similar views on risk-taking and decision-making. <br><br>Couples who are similarly impulsive with not much regard to rules or regulations find the most fun and freedom when in each other's company. As a result the physical compatibility of such individuals also tends to be quite high. Partners with one-night stands typically fall into this category. <br><br>Couples who are equally averse to risk-taking and instead prefer making "safe" decisions tend to have more relationship stability. However, the long-term effects of such mundanity and uptightness in everyday life can often manifest itself in heightened sexual tension and restlessness between partners.
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(A) Attachment and Dependence: {{ results['ATTDEP'] }}%<span>+</span></button>
+	<div class="content">
+	  <p>A higher number in the <b>A</b> category means you and your partner have similar levels of openness to others and exhibit similar behaviors and attitudes towards social situations. <br><br>Couples who both have high A scores enjoy social interaction and mingling with different groups of people and are often the life of the party. However, such behavior can sometimes brood jealousy between couples if they feel their partner is giving too much attention to others. Cheating also arises most frequently between these types of couples. <br><br>Couples who both have low A scores do not enjoy social gatherings and much prefer to keep to themselves and enjoy each other's company. However, the more they rely on each other as their only sole of human interaction, the more distraught these couples will feel in times of long-distance separation. As such, breakups will be emotionally destructive for both parties, so such couples should be wary of this fact and ensure they have healthy coping mechanisms. 
+	  </p>
+	</div>
+	<button type="button" class="collapsible">(S) Sentimentality and Empathy: {{ results['SENTIM'] }}%<span>+</span></button>
+	<div class="content">
+	  <p>A higher number in the <b>S</b> category indicates you and your parter exhibit similar levels of understanding towards people and have similar emotional intelligence. <br><br>Couples who both have high levels of empathy find it easier to be emotionally vulnerable with and reliant on each other for comfort in times of distress. <br><br>Couple who both have low empathy may find it harder to relate to each other's troubles and find themselves unable to emotionally support each other. However, their ability to emotionally detach themselves at the right times using logic and reason is also an important strength of such couples. 
+	  </p>
+	</div>
+
+	<h2 class="pad-m text-center compat">Here's your <b>investment</b> compatibility score out of 5.</h2>
+	<div class="iparent">
+		<div class="ichild num" id="i1">1</div>
+		<div class="ichild num" id="i2">2</div>
+		<div class="ichild num" id="i3">3</div>
+		<div class="ichild num" id="i4">4</div>
+		<div class="ichild num" id="i5">5</div>
+	</div>
+	<div class="iparent">
+		<div class="ichild des" id="d1">Your investment choices differ largely.</div>
+		<div class="ichild des" id="d2">Your investment choices have little similarity.</div>
+		<div class="ichild des" id="d3">You and your partner have similar investing habits.</div>
+		<div class="ichild des" id="d4">Your investment choices are mostly aligned. </div>
+		<div class="ichild des" id="d5">Your investment choices are virtually identical.</div>
+	</div>
+
+<script>
+	function adjustCompatForPhone(x, iscore) {
+	  if (x.matches) { // If media query matches
+	  	for (i = 1; i <= 5; i++) {
+	  		if (i == iscore) continue;
+	  		document.getElementById("i"+i).style.display = "none";
+	  		document.getElementById("d"+i).style.display = "none";
+	  	}
+	  } 
+	}
+
+	// range: 1-5
+	var iscore = {{ results['INVDIF']|safe }};
+	if (iscore < 1) {iscore = 1;}
+	if (iscore > 5) {iscore = 5;}
+	iscore = 6-iscore;
+	document.getElementById("i"+iscore).style.color = "black";
+	document.getElementById("i"+iscore).style.fontSize = "3.5em";
+	document.getElementById("d"+iscore).style.color = "black";
+
+	// phone screen
+	var x = window.matchMedia("(max-width: 400px)");
+	adjustCompatForPhone(x, iscore);
+	x.addListener(adjustCompatForPhone);
+
+</script>
+{% endblock %}

@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400&display=swap');
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -5,8 +8,12 @@
 }
 
 body {
-    font-family: sans-serif;
+    font-family: "Andale Mono", AndaleMono, monospace;
     font-size: 16px;
+    background-image: url('../assets/tile-white.png');
+    background-size:100px;
+    background-repeat: repeat;
+    cursor: crosshair;
 }
 nav {
     background: #222;
@@ -34,6 +41,15 @@ a {
     list-style-type: none;
     display: flex;
     align-items: center;
+    margin: 0;
+}
+.menu a{
+  color: white;
+  text-decoration: none;
+}
+.logo a:hover{
+  color: white;
+  text-decoration: none;
 }
 .logo {
     font-size: 20px;
@@ -48,12 +64,20 @@ a {
 }
 
 .menu li.button a {
+  background:#000;
+	color: #fff;
+  border: 1px solid #33ff33;
 	padding: 10px 15px;
 	margin: 5px 0;
 }
+.menu li.button a:hover {
+  background:rgb(240, 240, 240);
+	color: #000;
+  border: 1px solid #33ff33;
+}
 .button a {
 	background: #0080ff;
-	border: 1px royalblue solid;
+	border: 1px #2cda2c solid;
 }
 .button.secondary {
 	padding-left: 3px;
@@ -68,10 +92,12 @@ a {
 }
 .button:not(.secondary) a:hover {
 	background: transparent;
-	border-color: #0080ff;
+  background:rgb(58, 58, 58);
+	color: #fff;
+  border: 1px solid #33ff33;
 }
 .button.secondary a:hover {
-	background: #5a5a5a;
+	background: #3a3a3a;
 }
 
 /* Body */
@@ -105,10 +131,8 @@ input {
 .container .button a {
 	padding: 10px 15px;
 	margin: 5px 0;
-	background: #9eaab7;
-}
-.container .button a:hover {
-	background: #0080ff;
+  color: #2cda2c;
+  background:rgb(48, 48, 48);
 }
 
 .container .info {
@@ -129,14 +153,18 @@ input[type=submit] {
     margin-top: 5px;
     font-size: 16px;
     padding: 10px 15px;
-    background:#9eaab7; 
+    background:#8c9096; 
     color: white;
-    border:1px royalblue solid;
+    border:1px #2cda2c solid;
     cursor: pointer;
+    font-family: "Andale Mono", AndaleMono, monospace;
+    font-style:italic;
 }
 
 input[type=submit]:hover {
-    background: #0080ff;
+    font-style:normal;
+    font-size:20px;
+    background: #2cda2c;
 }
 
 
@@ -178,7 +206,7 @@ input[type=submit]:hover {
   background: #d9d9d9;
 }
 .flex-row.close:hover {
-  background: #0080ff;
+  background: #A2AF9F;
 }
 
 /* Results */
@@ -187,15 +215,22 @@ input[type=submit]:hover {
   color: white;
   cursor: pointer;
   padding: 18px;
-  width: 50%;
+  width: 60%;
   border: none;
   text-align: left;
   outline: none;
   font-size: 15px;
+  font-family: 'Space Mono', monospace;
+  font:12px;
+  font-style:italic;
 }
 .active, .collapsible:hover {
   background-color: #555;
   color: white;
+  outline: none;
+}
+.active, .collapsible:focus{
+  outline: none;
 }
 .collapsible span {
   float: right;
@@ -204,12 +239,14 @@ input[type=submit]:hover {
   opacity: 0;
 }
 .content {
-  width: 50%;
+  width: 60%;
   padding: 0 16px;
   background-color: #f1f1f1;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
+  font-family: 'Space Grotesk', monospace;
+  text-align:left;
 }
 .content p{
   margin: 1em 0;
@@ -223,6 +260,40 @@ input[type=submit]:hover {
 }
 .text-center{
   text-align: center;
+}
+
+/* Progress Bar*/
+.progress {
+  border:1px solid #000;
+  border-radius:5px;
+  background-color:rgb(255, 255, 255);
+}
+.progress-bar-color {
+  text-align:center;
+  background-color: #75df75 !important;
+}
+
+/* Compatibility */
+.compat {
+  font-size: 1.5em;
+}
+.iparent {
+  display: flex;
+  flex-wrap: wrap;
+  width: 70%;
+}
+.ichild {
+  flex: 1 0 10%;
+  margin: 5px;
+  font-size: 3em;
+  text-align: center;
+  color: #999;
+}
+.ichild.num {
+  margin: auto;
+}
+.ichild.des {
+  font-size: 16px;
 }
 
 @media (min-width: 481px) and (max-width: 768px)
@@ -241,6 +312,9 @@ input[type=submit]:hover {
   .collapsible, .content{
     width:90%;
   }
+  .iparent {
+    width:90%;
+  }
 }
 @media (max-width: 480px)
 {
@@ -256,6 +330,9 @@ input[type=submit]:hover {
   .collapsible, .content{
     width:95%;
     font-size: 20px;
+  }
+  .iparent {
+    width: 100%;
   }
   #about {display: none;}
 }
