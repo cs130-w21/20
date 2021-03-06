@@ -101,6 +101,11 @@ def create_app(test_config=None):
 				return render_template('index.html', stock_dict=session['stock_dict'])
 			return render_template('index.html', stock_dict=None)
 
+	# About page
+	@app.route('/about')
+	def about():
+		return render_template('about.html')
+
 	# Compare page
 	@app.route('/compare/<code>', methods=['GET', 'POST'])
 	def compare(code):

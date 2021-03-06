@@ -1,14 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
 	<h1>{% block title %}Your Compatibility is {{ results['COMPAT'] }}%{% endblock %}</h1>
 	<p></p>
     <div class="progress" style="width:70%">
-        <div class="progress-bar progress-bar-striped active" role="progressbar"
-        aria-valuenow="{{ results['COMPAT'] }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ results['COMPAT'] }}%">
+        <div class="progress-bar-color" role="progressbar" style="width: {{ results['COMPAT'] }}%">
           {{ results['COMPAT'] }}%
         </div>
     </div>
@@ -52,13 +48,6 @@
 		<div class="ichild des" id="d5">Your investment choices differ largely.</div>
 	</div>
 
-
-	{% if results['HOBCHK']|length %}
-	    <h2 class="pad-m text-center compat">Here are some mutual hobbies we found.</h2>
-	    <div class="info flex-center">
-	    	<p>results['HOBCHK']</p>
-	    </div>
-	{% endif %}
 <script>
 	function adjustCompatForPhone(x, iscore) {
 	  if (x.matches) { // If media query matches
