@@ -1,27 +1,27 @@
+"""
+The **algorithm** module provides various algorithms for generating personality and compatability profiles.
+"""
+
 from math import exp, floor
 import sys, ast
 
 # TODO: cache calls to Finnhub
 def generate_profile(portfolio, finnhub_client):
     """
-    Generates personality profile from portfolio
+    Generates personality profile from portfolio.
 
-    Parameters
-    ----------
-    portfolio : (str, int) dict
-        Dictionary of stock symbol and number held
-        pairs.
-    finnhub_client : finnhub.Client
-        Finnhub API client for financial data
+    #### Parameters
+    - **portfolio : (str, int) dict** - Dictionary of stock symbol and number held pairs.
+    - **finnhub_client : finnhub.Client** - Finnhub API client for financial data.
 
-    Returns
-    -------
-    (str, int) dict
-        Dictionary of personality factors and
-        values.
+    #### Return Value
+    **(str, int) dict** - Dictionary of personality factors and values. 
     
-    Notes
-    -------
+    #### Notes
+    ...
+    """
+
+    """
     Dependent Var MB, SIZE regression values
     EXPEXT 0.026 ; 854
     IMPDIS 0.027 ; -1004
@@ -114,22 +114,18 @@ def generate_profile(portfolio, finnhub_client):
 
 def compare_profiles(person1, person2):
     """
-    Generates personality profile from portfolio
+    Generates compatability profile from two personality profiles.
 
-    Parameters
-    ----------
-    person1 : (str, int) dict
-        Dictionary of personality profile for Person 1.
-    person2 : (str, int) dict
-        Dictionary of personality profile for Person 2.
-    finnhub_client : finnhub.Client
-        Finnhub API client for financial data
+    #### Parameters
+    - **person1 : (str, int) dict** - Personality profile for Person 1.
+    - **person2 : (str, int) dict** - Personality profile for Person 2.
+    - **finnhub_client : finnhub.Client** - Finnhub API client for financial data.
 
-    Returns
-    -------
-    compatibility:
-        Percentage describing compatibility between
-        two profiles, range 0-100
+    #### Return Value
+    **(str, int) dict** - Dictionary of compatability factors and values.
+
+    #### Notes
+    ...
     """
 
     # Compatibility Profile

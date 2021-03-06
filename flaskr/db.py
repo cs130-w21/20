@@ -1,3 +1,8 @@
+"""
+The **db** module provides various methods for performing database operations on our SQLite database, 
+including initialization, opening/closing connections, and CRUD operations for reading/writing to the database.
+"""
+
 import sqlite3, click, json
 
 from flask import current_app, g
@@ -7,18 +12,14 @@ from flask.cli import with_appcontext
 
 def get_profile(user_id):
     """
-    Queries SQLite database for profile by user ID
+    Queries SQLite database for profile by user ID.
 
-    Arguments
-    ---------
-    user_id : string
-        User ID of profile to query
+    #### Parameters
+    - **user_id : string** - User ID of profile to query.
 
-    Returns
-    -------
-    sqlite3.Row
-        A Row object containing the query result, or
-        None if a row with uid = user_id does not exist
+    #### Return Value
+    **sqlite3.Row** - A Row object containing the query result, or
+    None if a row with uid = user_id does not exist.
     """
 
     profile = get_db().execute(
@@ -29,21 +30,16 @@ def get_profile(user_id):
 
 def create_profile(user_id, profile={}):
     """
-    Creates a new row in the profiles table of the SQLite database
+    Creates a new row in the profiles table of the SQLite database.
 
-    Arguments
-    ---------
-    user_id : string
-        User ID of profile
-    profile : (strint, int) dict
-        Profile containing personality factors and values
-        created by algorithm.generate_profile()
+    #### Parameters
+    - **user_id : string** - User ID of profile.
+    - **profile : (strint, int) dict** - Profile containing personality factors and values 
+    created by `algorithm.generate_profile()`.
 
-    Notes
-    -----
-    Profile is serialized into a JSON string using json.dumps()
+    Profile is serialized into a JSON string using `json.dumps()`
     before storing into the database (SQLite does not support
-    storing of complex data structures)
+    storing of complex data structures).
     """
 
     db = get_db()
@@ -59,12 +55,10 @@ def create_profile(user_id, profile={}):
 def get_db():
     """
     Initializes connection to SQLite database if one hasn't already
-    been created, otherwise returns the singleton Connection object
+    been created, otherwise returns the singleton Connection object.
 
-    Returns
-    -------
-    sqlite3.Connection
-        A Connection object to the SQLite database
+    #### Return Value
+    **sqlite3.Connection** - A Connection object to the SQLite database.
     """
 
     if 'db' not in g:
@@ -77,7 +71,10 @@ def get_db():
     return g.db
 
 def close_db(e=None):
-    """Closes connection to SQLite database"""
+    """
+    Removes Connection object from application context and closes connection to the 
+    SQLite database.
+    """
 
     db = g.pop('db', None)
 
@@ -85,6 +82,9 @@ def close_db(e=None):
         db.close()
 
 def init_db():
+    """
+    Executes the setup SQL script and clears existing data / creates new tables.
+    """
     db = get_db()
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
@@ -97,5 +97,12 @@ def init_db_command():
     click.echo('Initialized the database.')
 
 def init_app(app):
+    """
+    Initializes the Flask app by registering the `init_db` and `close_db` commands with 
+    the application instance.
+
+    #### Parameters
+    - **app : flask.Flask** - The Flask instance.
+    """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
