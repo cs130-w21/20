@@ -34,4 +34,4 @@ def test_post_compare(client):
             person1=TEST_ID1,
             person2=TEST_ID2
     ), follow_redirects=True)
-    assert b"Welcome to StockMeetsBagel" in post_response.data
+    assert b"Your Compatibility is" in post_response.data
