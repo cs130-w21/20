@@ -72,9 +72,3 @@ def test_index(client):
     ), follow_redirects=True)
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert b"Get My Results" not in get_response.data
-
-def test_index2(client):
-    get_response = client.get('about')
-    assert b"Website created by..." in get_response.data
-    
-    #TODO: implement other tests as needed from coverage report
