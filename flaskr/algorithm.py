@@ -135,9 +135,9 @@ def compare_profiles(person1, person2):
         'IMPDIS': 0.0,
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
-        'INVDIF': 0,        # int: difference in investment quintile
+        'INVDIF': 0,        # int: difference in "investment rank"
         'HOBCHK': "",       # str: name of most popular sector if matched, "" otherwise
-        'COMPAT': 0.0       # float: compatibility percentage
+        'COMPAT': 0.0       # float: final compatibility percentage
     }
 
     # Check keys exist in profiles
@@ -160,7 +160,7 @@ def compare_profiles(person1, person2):
     compatibility = (compatProfile['EXPEXT'] + compatProfile['IMPDIS'] + 
                     compatProfile['ATTDEP'] + compatProfile['SENTIM']) / 4
 
-    # Investment (amount of money invested in market) Factor: +/-15% based on wealth bracket
+    # Investment Factor: +/-15% based on wealth bracket
     compatProfile['INVDIF'] = abs(person1['INVEST'] - person2['INVEST'])
     compatibility += (compatProfile['INVDIF'] - 2.5) * -6
 
