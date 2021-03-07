@@ -1,27 +1,28 @@
+"""
+The **algorithm** module provides various algorithms for generating personality and compatability profiles.
+"""
+
 from math import exp, floor
 import sys, ast
 
 # TODO: cache calls to Finnhub
 def generate_profile(portfolio, finnhub_client):
     """
-    Generates personality profile from portfolio
+    Uses regression analysis to generate a personality profile from a stock portfolio.
 
-    Parameters
-    ----------
-    portfolio : (str, int) dict
-        Dictionary of stock symbol and number held
-        pairs.
-    finnhub_client : finnhub.Client
-        Finnhub API client for financial data
+    #### Parameters
+    - **portfolio : (str, int) dict** - Dictionary of stock symbol and number held pairs.
+    - **finnhub_client : finnhub.Client** - Finnhub API client for financial data.
 
-    Returns
-    -------
-    (str, int) dict
-        Dictionary of personality factors and
-        values.
-    
-    Notes
-    -------
+    #### Return Value
+    **(str, int) dict** - Dictionary of personality factors and values. The personality factors 
+    returned are Exploratory Excitability and Extravagance (EXPEXT), Impulsiveness and 
+    Disorderliness (IMPDIS), Sentimentality and Empathy (SENTIM), and Attachment and Dependence (ATTDEP) 
+    and are each assigned a value between 0-100. In addition, the personality profile also includes an 
+    investment rank (INVEST) between 0-5 which reflects the total value of the portfolio. 
+    """
+
+    """
     Dependent Var MB, SIZE regression values
     EXPEXT 0.026 ; 854
     IMPDIS 0.027 ; -1004
@@ -114,22 +115,19 @@ def generate_profile(portfolio, finnhub_client):
 
 def compare_profiles(person1, person2):
     """
-    Generates personality profile from portfolio
+    Generates a compatability profile from two personality profiles based on the 
+    differences between personality factors and investment rank.
 
-    Parameters
-    ----------
-    person1 : (str, int) dict
-        Dictionary of personality profile for Person 1.
-    person2 : (str, int) dict
-        Dictionary of personality profile for Person 2.
-    finnhub_client : finnhub.Client
-        Finnhub API client for financial data
+    #### Parameters
+    - **person1 : (str, int) dict** - Personality profile for Person 1.
+    - **person2 : (str, int) dict** - Personality profile for Person 2.
+    - **finnhub_client : finnhub.Client** - Finnhub API client for financial data.
 
-    Returns
-    -------
-    compatibility:
-        Percentage describing compatibility between
-        two profiles, range 0-100
+    #### Return Value
+    **(str, int) dict** - Dictionary of compatability factors and values. Compatability 
+    profile contains a "closeness" score for each personality factor from 0-100 (EXPEXT, IMPDIS,
+    ATTDEP, SENTIM), the difference in investment rank from 0-5 (INVDIF), and an overall compatability 
+    score from 0-100 calculated from both components (COMPAT).
     """
 
     # Compatibility Profile
@@ -137,9 +135,9 @@ def compare_profiles(person1, person2):
         'IMPDIS': 0.0,
         'ATTDEP': 0.0,
         'SENTIM': 0.0,
-        'INVDIF': 0,        # int: difference in investment quintile
+        'INVDIF': 0,        # int: difference in "investment rank"
         'HOBCHK': "",       # str: name of most popular sector if matched, "" otherwise
-        'COMPAT': 0.0       # float: compatibility percentage
+        'COMPAT': 0.0       # float: final compatibility percentage
     }
 
     # Check keys exist in profiles
@@ -162,7 +160,7 @@ def compare_profiles(person1, person2):
     compatibility = (compatProfile['EXPEXT'] + compatProfile['IMPDIS'] + 
                     compatProfile['ATTDEP'] + compatProfile['SENTIM']) / 4
 
-    # Investment (amount of money invested in market) Factor: +/-15% based on wealth bracket
+    # Investment Factor: +/-15% based on wealth bracket
     compatProfile['INVDIF'] = abs(person1['INVEST'] - person2['INVEST'])
     compatibility += (compatProfile['INVDIF'] - 2.5) * -6
 
