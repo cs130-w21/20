@@ -34,10 +34,29 @@ def test_post_compare(client):
     # Enter two IDs
     
     # no portfolio in session, so should redirect to index
-    # TODO: implement this when Compare is implemented
     post_response = client.post('compare/<placeholder>', data=dict(
             person1=TEST_ID1,
             person2=TEST_ID2
+    ), follow_redirects=True)
+    assert b"Your Compatibility is" in post_response.data
+
+def test_post_compare2(client):
+    # check for incomplete 
+    post_response = client.post('compare/<placeholder>', data=dict(
+        person1='BBBBBBBBBB',
+        person2=TEST_ID2
+    ), follow_redirects=True)
+    assert b"Your Compatibility is" in post_response.data
+
+    post_response = client.post('compare/<placeholder>', data=dict(
+        person1=TEST_ID1,
+        person2='BBBBBBBBBB'
+    ), follow_redirects=True)
+    assert b"Your Compatibility is" in post_response.data
+    # same hobbie
+    post_response = client.post('compare/<placeholder>', data=dict(
+        person1=TEST_ID2,
+        person2='AAAAAAAAAA'
     ), follow_redirects=True)
     assert b"Your Compatibility is" in post_response.data
 
