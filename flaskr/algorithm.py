@@ -8,14 +8,18 @@ import sys, ast
 # TODO: cache calls to Finnhub
 def generate_profile(portfolio, finnhub_client):
     """
-    Generates personality profile from portfolio.
+    Uses regression analysis to generate a personality profile from a stock portfolio.
 
     #### Parameters
     - **portfolio : (str, int) dict** - Dictionary of stock symbol and number held pairs.
     - **finnhub_client : finnhub.Client** - Finnhub API client for financial data.
 
     #### Return Value
-    **(str, int) dict** - Dictionary of personality factors and values. 
+    **(str, int) dict** - Dictionary of personality factors and values. The personality factors 
+    returned are Exploratory Excitability and Extravagance (EXPEXT), Impulsiveness and 
+    Disorderliness (IMPDIS), Sentimentality and Empathy (SENTIM), and Attachment and Dependence (ATTDEP) 
+    and are each assigned a value between 0-100. In addition, the personality profile also includes an 
+    investment rank (INVEST) between 0-5 which reflects the total value of the portfolio. 
     """
 
     """
@@ -111,7 +115,8 @@ def generate_profile(portfolio, finnhub_client):
 
 def compare_profiles(person1, person2):
     """
-    Generates compatability profile from two personality profiles.
+    Generates a compatability profile from two personality profiles based on the 
+    differences between personality factors and investment rank.
 
     #### Parameters
     - **person1 : (str, int) dict** - Personality profile for Person 1.
@@ -119,7 +124,10 @@ def compare_profiles(person1, person2):
     - **finnhub_client : finnhub.Client** - Finnhub API client for financial data.
 
     #### Return Value
-    **(str, int) dict** - Dictionary of compatability factors and values.
+    **(str, int) dict** - Dictionary of compatability factors and values. Compatability 
+    profile contains a "closeness" score for each personality factor from 0-100 (EXPEXT, IMPDIS,
+    ATTDEP, SENTIM), the difference in investment rank from 0-5 (INVDIF), and an overall compatability 
+    score from 0-100 calculated from both components (COMPAT).
     """
 
     # Compatibility Profile

@@ -17,7 +17,8 @@ https://finnhub.io/docs/api
 
 def create_app(test_config=None):
 	"""
-	Application factory function to set up the Flask application.
+	Application factory function to set up the Flask application. Defines 
+	the endpoints/routes for the application.
 
 	#### Endpoints
 
