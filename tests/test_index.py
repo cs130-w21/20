@@ -72,3 +72,16 @@ def test_index(client):
     ), follow_redirects=True)
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert b"Get My Results" not in get_response.data
+
+def test_about_remove(client):
+    get_response = client.get('about')
+    assert b"Website created by..." in get_response.data
+
+    get_response = client.get('remove/ZZZZ',
+        follow_redirects = True)
+    assert b"Welcome to StockMeetsBagel" in get_response.data
+    assert b"Get My Results" not in get_response.data
+    
+def test_app_no_config(client, app_no_test):
+    get_response = client.get('about')
+    assert b"Website created by..." in get_response.data
