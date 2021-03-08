@@ -118,6 +118,8 @@ def create_app(test_config=None):
 				error = "Number of Shares must be a positive integer"
 			elif int(volume) < 1:
 				error = "Number of Shares must be a positive integer"
+			elif int(volume) > 1e20:
+				error = "Number of Shares too large"
 			elif symbol_quote['c'] == 0:
 				error = "Invalid stock symbol: {}".format(stock_symbol)
 

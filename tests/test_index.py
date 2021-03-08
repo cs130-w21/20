@@ -36,6 +36,18 @@ def test_index(client):
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
 
+    # Add humongous volume
+    post_response = client.post('/', data=dict(
+            stock=TEST_STOCK2,
+            volume='29999313486231599000000000000000000000000000000000000'+
+            '0000000000000000000000000000000000000000000000000000000000000'+
+            '00000000000000000000000000000000000000000000000000000100000000'+
+            '000000000000000000000000000000000000000000000000000000000000000'+
+            '0000000000000000000000000000000000000000000000000000000000000000000010'
+    ), follow_redirects=True)
+    assert b"Number of Shares too large" in post_response.data
+    assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
+
     # Add non-positive volume
     post_response = client.post('/', data=dict(
             stock=TEST_STOCK2,
