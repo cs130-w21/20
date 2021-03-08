@@ -109,6 +109,7 @@ def test_total_value(client, monkeypatch):
 def test_sectors(client, monkeypatch):
     def fake_profile2(_self, **params):
         return dict(finnhubIndustry='gamer')
+    # set one hobby with fake function
     monkeypatch.setattr('finnhub.Client.company_profile2', fake_profile2)
 
     client.post('/', data=dict(
@@ -127,7 +128,7 @@ def test_sectors(client, monkeypatch):
 def test_generate_uid(client, app, monkeypatch):
     def fake_secrets_choice(sequence):
         return 'A'
-
+    # Replace choice function with fake
     monkeypatch.setattr('secrets.choice', fake_secrets_choice)
 
     client.post('/', data=dict(
