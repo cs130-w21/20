@@ -47,6 +47,83 @@ def test_stock_in_session(client, app):
     assert b"Your profile has been generated." in get_response.data
     assert b"Compare Our Results" in get_response.data
 
+def test_total_value(client, monkeypatch):
+    def fake_financials(_self, symbol, typ):
+        return dict(
+            metric={
+                '52WeekHigh': '1',
+                '52WeekLow': '1',
+                'bookValuePerShareAnnual': '1',
+                'marketCapitalization': '1'
+            }
+            )
+    monkeypatch.setattr('finnhub.Client.company_basic_financials', fake_financials)
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='1'
+    ), follow_redirects=True)
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='5000'
+    ), follow_redirects=True)
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='40000'
+    ), follow_redirects=True)
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='100000'
+    ), follow_redirects=True)
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='250000'
+    ), follow_redirects=True)
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='650000'
+    ), follow_redirects=True)
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
+def test_sectors(client, monkeypatch):
+    def fake_profile2(_self, **params):
+        return dict(finnhubIndustry='gamer')
+    monkeypatch.setattr('finnhub.Client.company_profile2', fake_profile2)
+
+    client.post('/', data=dict(
+            stock='XELA',
+            volume='10'
+    ), follow_redirects=True)
+    client.post('/', data=dict(
+            stock='MSFT',
+            volume='1'
+    ), follow_redirects=True)
+    
+    get_response = client.get('results', follow_redirects=True)
+    assert b"Your profile has been generated." in get_response.data
+    assert b"Compare Our Results" in get_response.data
+
 def test_generate_uid(client, app, monkeypatch):
     def fake_secrets_choice(sequence):
         return 'A'
