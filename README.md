@@ -52,3 +52,9 @@ If you are running the application for the first time, you will need to initiali
 ```
 $ flask init-db
 ```
+With the database initialized, launch the application within `venv` with
+```
+$ export FLASK_APP=flaskr
+$ flask run
+```
+This release uses Flask's built-in server, but it is recommended to use a production container like `Gunicorn`.
