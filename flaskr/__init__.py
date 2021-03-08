@@ -58,7 +58,7 @@ def create_app(test_config=None):
 	"""
 
 	app = Flask(__name__, instance_relative_config=True)
-	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
+	finnhub_client = make_client(api_key="c0bfrg748v6to0rovefg")
 
 	# Load config (if it exists) or take a test config
 	if test_config is None:
@@ -113,6 +113,7 @@ def create_app(test_config=None):
 			stock_symbol = request.form['stock'].upper()
 			volume = request.form['volume']
 			symbol_quote = finnhub_client.quote(stock_symbol)
+			etf_country = finnhub_client.etfs_country_exp(stock_symbol)
 			error = None
 			if not volume.isdigit():
 				error = "Number of Shares must be a positive integer"
@@ -122,6 +123,8 @@ def create_app(test_config=None):
 				error = "Number of Shares too large"
 			elif symbol_quote['c'] == 0:
 				error = "Invalid stock symbol: {}".format(stock_symbol)
+			elif etf_country['symbol'] != '':
+				error = "Cannot process ETF: {}".format(stock_symbol)
 
 			# TODO: Send form results to DB, fetch all added stocks and display them
 			# Code below uses Flask session to store data which can be moved to
