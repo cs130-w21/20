@@ -57,14 +57,13 @@ def test_index(client):
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
 
-    # Add non-positive volume
+    # Add ETF stock symbol
     post_response = client.post('/', data=dict(
             stock=TEST_ETF,
             volume='3'
     ), follow_redirects=True)
     assert bytes("Cannot process ETF: {}".format(TEST_ETF), 
         encoding=ENCODING) in post_response.data
-    assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
 
     # Add TEST_STOCK2
     post_response = client.post('/', data=dict(
