@@ -5,7 +5,7 @@ from flask import (
 	flash,
 )
 from finnhub import Client as make_client
-from . import algorithm
+from flaskr import algorithm
 """
 Elvis' Finnhub API keys
 Sandbox API Key: sandbox_c0bfrg748v6to0roveg0
@@ -16,8 +16,49 @@ https://finnhub.io/docs/api
 """
 
 def create_app(test_config=None):
+	"""
+	Application factory function to set up the Flask application. Defines 
+	the endpoints/routes for the application.
+
+	#### Endpoints
+
+	##### `@app.route('/', methods=['GET', 'POST'])`
+	Returns index/home page with fields for updating stock portfolio.
+	- **GET:** Returns index page.
+	- **POST:** Updates stock portfolio in `session` with form input then renders index page. 
+	Returns an error if stock symbol is invalid or the number of shares is not a positive integer.
+
+	##### `@app.route('/about')`
+	Returns About page.
+
+	##### `@app.route('/compare/<code>', methods=['GET', 'POST'])`
+	Returns compare page with input fields for UIDs of profiles to compare and computes compatability.
+	- **GET:** Returns compare page. If `code` is not `<placeholder>`, then the first input field
+	will have its initial value set to `code`.
+	- **POST:** Fetches profiles for the input UIDs from the SQLite database, computes the 
+	compatability between the profiles, stores this in `session`, then redirects to the 
+	compatability page. Returns an error if both input IDs are the same or a profile does not 
+	exist for either UID in the SQLite database.
+
+	##### `@app.route('/results')`
+	Generates a profile from stock portfolio stored in `session` and a UID, stores the profile + UID
+	in the SQLite database, and returns the page displaying this information.
+
+	- If no stock portfolio exists in `session`, this endpoint redirects to the index page.
+	- Generating a profile / UID and persisting this information in the database is skipped 
+	if the current stock portfolio in `session` remains unchanged from the last time a profile 
+	was generated.
+
+	##### `@app.route('/compat')`
+	Returns page displaying compatability results.
+
+	##### `@app.route('/remove/<key>')`
+	Removes stock symbol `key` from `session` and redirects to index page.
+
+	"""
+
 	app = Flask(__name__, instance_relative_config=True)
-	finnhub_client = make_client(api_key="sandbox_c0bfrg748v6to0roveg0")
+	finnhub_client = make_client(api_key="c0bfrg748v6to0rovefg")
 
 	# Load config (if it exists) or take a test config
 	if test_config is None:
@@ -34,7 +75,7 @@ def create_app(test_config=None):
 		pass
 
 	# Initialize db
-	from . import db
+	from flaskr import db
 	db.init_app(app)
 
 	# Fix browser caching for css
@@ -72,13 +113,18 @@ def create_app(test_config=None):
 			stock_symbol = request.form['stock'].upper()
 			volume = request.form['volume']
 			symbol_quote = finnhub_client.quote(stock_symbol)
+			etf_country = finnhub_client.etfs_country_exp(stock_symbol)
 			error = None
 			if not volume.isdigit():
 				error = "Number of Shares must be a positive integer"
 			elif int(volume) < 1:
 				error = "Number of Shares must be a positive integer"
+			elif int(volume) > 1e20:
+				error = "Number of Shares too large"
 			elif symbol_quote['c'] == 0:
 				error = "Invalid stock symbol: {}".format(stock_symbol)
+			elif etf_country['symbol'] != '':
+				error = "Cannot process ETF: {}".format(stock_symbol)
 
 			# TODO: Send form results to DB, fetch all added stocks and display them
 			# Code below uses Flask session to store data which can be moved to
@@ -101,9 +147,14 @@ def create_app(test_config=None):
 				return render_template('index.html', stock_dict=session['stock_dict'])
 			return render_template('index.html', stock_dict=None)
 
+	# About page
+	@app.route('/about')
+	def about():
+		return render_template('about.html')
+
 	# Compare page
-	@app.route('/compare', methods=['GET', 'POST'])
-	def compare():
+	@app.route('/compare/<code>', methods=['GET', 'POST'])
+	def compare(code):
 		if request.method == 'POST':
 			uid1 = request.form['person1']
 			uid2 = request.form['person2']
@@ -126,17 +177,16 @@ def create_app(test_config=None):
 				session['compatPercent'] = algorithm.compare_profiles(p1, p2)
 				print(session['compatPercent'])
 				print("Compatibility Percentage: " + str(session['compatPercent']['COMPAT']), file=sys.stderr)
-				
-				# TODO: present compatibility result
-				# Currently redirects to home page
 
 				return redirect(url_for('compat'))
 			else:
 				flash(error)
-				return render_template('compare.html')
-
+				return render_template('compare.html', code="")
 		else:
-			return render_template('compare.html')
+			if code == '<placeholder>':
+				return render_template('compare.html', code="")
+			else:
+				return render_template('compare.html', code=code)
 
 	# Present_id page (generates session id or code)
 	@app.route('/results')
@@ -147,8 +197,8 @@ def create_app(test_config=None):
 		if session['updated']:
 			person = algorithm.generate_profile(session['stock_dict'], finnhub_client)
 			session['person'] = person
-		
-		# If code has already been generated and the input portfolio is unchanged, 
+
+		# If code has already been generated and the input portfolio is unchanged,
 		# skip code generation and persisting to db
 		if 'code' in session and not session['updated']:
 			return render_template('results.html', code=session['code'], warning=True, person=session['person'])
@@ -167,7 +217,8 @@ def create_app(test_config=None):
 
 	@app.route('/compat')
 	def compat():
-		return redirect(url_for('index'))
+		results = session['compatPercent']
+		return render_template('compat.html', results=results)
 
 	# Remove stock symbol from table
 	@app.route('/remove/<key>')

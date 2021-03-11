@@ -4,6 +4,7 @@ TEST_STOCK = 'MSFT'
 TEST_SHARES = '1'
 TEST_STOCK2 = 'AAPL'
 TEST_SHARES2 = '3'
+TEST_ETF = 'VOO'
 ENCODING = 'utf-8'
 
 # run with `pytest`
@@ -36,6 +37,18 @@ def test_index(client):
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
 
+    # Add humongous volume
+    post_response = client.post('/', data=dict(
+            stock=TEST_STOCK2,
+            volume='29999313486231599000000000000000000000000000000000000'+
+            '0000000000000000000000000000000000000000000000000000000000000'+
+            '00000000000000000000000000000000000000000000000000000100000000'+
+            '000000000000000000000000000000000000000000000000000000000000000'+
+            '0000000000000000000000000000000000000000000000000000000000000000000010'
+    ), follow_redirects=True)
+    assert b"Number of Shares too large" in post_response.data
+    assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
+
     # Add non-positive volume
     post_response = client.post('/', data=dict(
             stock=TEST_STOCK2,
@@ -43,6 +56,14 @@ def test_index(client):
     ), follow_redirects=True)
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert bytes(TEST_STOCK2, encoding=ENCODING) not in post_response.data
+
+    # Add ETF stock symbol
+    post_response = client.post('/', data=dict(
+            stock=TEST_ETF,
+            volume='3'
+    ), follow_redirects=True)
+    assert bytes("Cannot process ETF: {}".format(TEST_ETF), 
+        encoding=ENCODING) in post_response.data
 
     # Add TEST_STOCK2
     post_response = client.post('/', data=dict(
@@ -72,3 +93,16 @@ def test_index(client):
     ), follow_redirects=True)
     assert b"Number of Shares must be a positive integer" in post_response.data
     assert b"Get My Results" not in get_response.data
+
+def test_about_remove(client):
+    get_response = client.get('about')
+    assert b"Website created by..." in get_response.data
+
+    get_response = client.get('remove/ZZZZ',
+        follow_redirects = True)
+    assert b"Welcome to StockMeetsBagel" in get_response.data
+    assert b"Get My Results" not in get_response.data
+    
+def test_app_no_config(client, app_no_test):
+    get_response = client.get('about')
+    assert b"Website created by..." in get_response.data

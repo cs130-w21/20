@@ -23,6 +23,13 @@ def app():
 	os.close(db_fd)
 	os.unlink(db_path)
 
+@pytest.fixture
+def app_no_test():
+	app = create_app(None)
+	# Warning: do not use this fixture for testing beyond
+	# initialization. If you need to, initialize the 
+	# DB here. (NOT RECOMMENDED)
+	yield app
 
 @pytest.fixture
 def client(app):
