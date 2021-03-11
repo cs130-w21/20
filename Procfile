@@ -1,2 +1,1 @@
-worker: flask init-db
-web: waitress-serve --port=$PORT --call 'flaskr:create_app'
+web: flask init-db && waitress-serve --port=$PORT --call 'flaskr:create_app'
