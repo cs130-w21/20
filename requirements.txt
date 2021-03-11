@@ -6,3 +6,5 @@ python-dotenv
 watchdog
 ##### API #####
 finnhub-python
+##### Deploy #####
+gunicorn==20.0.4
